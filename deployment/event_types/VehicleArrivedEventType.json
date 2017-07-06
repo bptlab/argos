@@ -1,0 +1,12 @@
+{
+	"name":"VehicleArrived",
+	"timestamp":"updateTime",
+	"attributes":{
+		"transportationModeId":"STRING",
+		"lineId":"STRING",
+		"vehicleId": "STRING"
+	},
+	"queries":{
+		"all events of this type":"SELECT * FROM VehicleArrived"
+	}
+}

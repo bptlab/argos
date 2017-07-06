@@ -1,0 +1,14 @@
+{
+  "name":"EstimatedArrivalChanged",
+  "timestamp":"actualArrival",
+  "attributes":{
+    "transportationModeId":"STRING",
+    "lineId":"STRING",
+    "naptanId":"STRING",
+    "vehicleId": "STRING",
+    "expectedArrival": "STRING"
+  },
+  "queries":{
+    "All events of that type": "SELECT * FROM EstimatedArrivalChanged"
+  }
+}

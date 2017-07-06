@@ -1,5 +1,5 @@
 const config = {
-	projectName: "Argos",
+    projectName: "Transport for London Dashboard",
 	useBackendMock: false,
 	basename: '${BASENAME}',
 	backendRESTRoute: "${HOST}/api",
