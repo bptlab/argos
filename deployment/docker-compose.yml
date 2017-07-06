@@ -5,7 +5,7 @@ services:
         volumes:
             - ./config/nginx-config.conf:/etc/nginx/nginx.conf:ro
         ports:
-            - "8080:80"
+            - "443:80"
         links:
             - frontend
             - backend
