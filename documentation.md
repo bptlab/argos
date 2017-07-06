@@ -6,8 +6,8 @@ permalink: /documentation/
 
 # Structure
 
-1. [Installation](https://bptlab.github.io/argos/documentation#Installation)
-1. [Configuration](https://bptlab.github.io/argos/documentation#Configuration)
+1. [Installation][Installation]
+1. [Configuration][Configuration]
 
 # Installation
 
