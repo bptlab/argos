@@ -1,0 +1,53 @@
+version: '3'
+services:
+    proxy:
+        image: "nginx:1-alpine"
+        volumes:
+            - ./config/nginx-config.conf:/etc/nginx/nginx.conf:ro
+        ports:
+            - "443:80"
+        links:
+            - frontend
+            - backend
+            - unicorn
+
+    frontend:
+        image: "bptlab/argos-frontend:latest"
+        env_file:
+            - deployment-config/host.env
+        volumes:
+            - ./config/frontend-config.js:/argos-frontend/src/config/config-template.js
+            - ./config/attribute-config.js:/argos-frontend/src/config/attributeConfig/attributeConfig.js
+            - ./config/help-config.js:/argos-frontend/src/config/help.js
+            - ./config/help_en.js:/argos-frontend/src/config/help_en.js
+            - ./config/help_de.js:/argos-frontend/src/config/help_de.js
+
+    backend:
+        image: "bptlab/argos-backend:latest"
+        env_file:
+            - deployment-config/database.env
+            - deployment-config/host.env
+        volumes:
+            - ./config/backend-config.properties:/argos-backend/src/main/resources/argos-backend.properties
+            - ./event_types:/argos-backend/src/main/resources/event_types
+            - ./static_data:/argos-backend/src/main/resources/static_data
+        links:
+            - database
+        depends_on:
+            - unicorn
+
+    unicorn:
+        image: "bptlab/unicorn:latest"
+        env_file:
+            - deployment-config/database.env
+            - deployment-config/host.env
+        volumes:
+            - ./config/unicorn-config.properties:/usr/local/tomcat/conf/unicorn.properties
+            - ./config/server-config.xml:/usr/local/tomcat/conf/server-template.xml
+        links:
+            - database
+
+    database:
+        image: "mysql:5"
+        env_file:
+            - deployment-config/database.env
