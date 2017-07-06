@@ -53,12 +53,12 @@ permalink: /documentation/
 ### Example Configuration
 
 There already are two example branches set up to give guidance how to configure the Argos Dashboard.
-1. Transport for London example: ```tfl_config_example``` branch.
-1. BoschTT IoT example: ```bosch_config_example``` branch.
+1. Transport for London example: ([```tfl_config_example```](https://github.com/bptlab/argos/tree/tfl_config_example)) branch.
+1. BoschTT IoT example: ([```bosch_config_example```](https://github.com/bptlab/argos/tree/bosch_config_example)) branch.
 
 ### Frontend Configuration
 
-Use the frontend configuration file ([```/deployment/config/frontend-config.js```](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/config/frontend-config.js)) to
+Use the frontend configuration file ([```/deployment/config/frontend-config.js```](https://github.com/bptlab/argos/tree/master/deployment/config/frontend-config.js)) to
 * change the project title,
 * adjust colors,
 * customize texts and
@@ -70,31 +70,31 @@ Do not:
 
 #### Attribute Configuration
 
-Adjust the display attribute config file ([```/deployment/config/attribute-config.js```](https://github.com/bptlab/wiki-resources/blob/master/argos-deployment/config/attribute-config.js)) file to choose the attributes that should be displayed on the cards in the grid view.
+Adjust the display attribute config file ([```/deployment/config/attribute-config.js```](https://github.com/bptlab/argos/tree/master/deployment/config/attribute-config.js)) file to choose the attributes that should be displayed on the cards in the grid view.
 * [Template file schema](https://github.com/bptlab/argos-frontend/wiki/AttributeConfig-Template)
-* [Transport for London example](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/config/attribute-config.js)
+* [Transport for London example](https://github.com/bptlab/argos/tree/tfl_config_example/deployment/config/attribute-config.js)
 
 #### Help Configuration
 
-The help configuration file is located under ([```/deployment/config/help-config.js```](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/config/help-config.js). You can import new help files here for other languages adhering to the existing format. Please also include the new help files in the ```docker-compose.yml``` like the existing ones. New help files must include all keys like the existing help files, e.g. ```help_de.js```.
+The help configuration file is located under ([```/deployment/config/help-config.js```](https://github.com/bptlab/argos/tree/master/deployment/config/help-config.js). You can import new help files here for other languages adhering to the existing format. Please also include the new help files in the ```docker-compose.yml``` like the existing ones. New help files must include all keys like the existing help files, e.g. ```help_de.js```.
 
 ### Backend, Unicorn and NGINX Configuration
 
 In most of the cases you will not need to change anything inside
-* [```/deployment/config/backend-config.properties```](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/config/argos-backend.properties)
-* [```/deployment/config/unicorn-config.properties```](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/config/unicorn.properties)
-* [```/deployment/config/nginx-config.conf```](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/config/nginx.conf)
+* [```/deployment/config/backend-config.properties```](https://github.com/bptlab/argos/tree/master/deployment/config/backend-config.properties)
+* [```/deployment/config/unicorn-config.properties```](https://github.com/bptlab/argos/tree/master/deployment/config/unicorn-config.properties)
+* [```/deployment/config/nginx-config.conf```](https://github.com/bptlab/argos/tree/master/deployment/config/nginx-config.conf)
 
 Everything should be preconfigured for you.
 
 ### Static data
 
-Put your static data inside ```argos-deployment/static_data``` as ```.xml``` files.
+Put your static data inside ([```/deployment/static_data```](https://github.com/bptlab/argos/tree/tfl_config_example/deployment/static_data) as ```.xml``` files.
 * [Template file schema](https://github.com/bptlab/argos-backend/wiki/Static-Data-File-Schema)
-* [Transport for London example](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/static_data/tfl_small.xml)
+* [Transport for London example](https://github.com/bptlab/argos/tree/tfl_config_example/deployment/static_data/tfl_small.xml)
 
 ### Basic event types
 
-Put your basic event types inside ```argos-deployment/event_types``` as ```.json``` files.
+Put your basic event types inside ([```/deployment/event_types```](https://github.com/bptlab/argos/tree/tfl_config_example/deployment/event_types) as ```.json``` files.
 * [Template file schema](https://github.com/bptlab/argos-backend/wiki/Default-EventType-File-Schema)
-* [Transport for London example](https://github.com/bptlab/wiki-resources/blob/TfL_usecase_deployment/argos-deployment/event_types/EstimatedArrivalChangedEventType.json)
+* [Transport for London example](https://github.com/bptlab/argos/tree/tfl_config_example/deployment/event_types/EstimatedArrivalChangedEventType.json)
