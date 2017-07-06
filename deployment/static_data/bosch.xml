@@ -1,0 +1,232 @@
+<staticData>
+    <types>
+        <type>
+            <name>ProductFamily</name>
+            <attributes>
+                <attribute>
+                    <name>IntroductionDate</name>
+                </attribute>
+				<attribute>
+                    <name>NumberOfProductsInAction</name>
+                </attribute>
+            </attributes>
+            <childTypes>
+                <type>
+                    <name>Product</name>
+                    <attributes>
+                        <attribute>
+							<name>ProductFamily</name>
+						</attribute>
+						<attribute>
+							<name>Brand</name>
+						</attribute>
+						<attribute>
+							<name>ProductId</name>
+						</attribute>
+						<attribute>
+							<name>Description</name>
+						</attribute>
+                    </attributes>
+					<childTypes>
+						<type>
+							<name>Configuration</name>
+							<attributes>
+								<attribute>
+									<name>Product</name>
+								</attribute>
+								<attribute>
+									<name>CodingPlugId</name>
+								</attribute>
+								<attribute>
+									<name>SoftwareVersion</name>
+								</attribute>
+							</attributes>
+						</type>
+					</childTypes>
+                </type>
+            </childTypes>
+        </type>
+    </types>
+
+    <instances>
+        <instance>
+            <name>Buderus Product Family 1</name>
+            <type>ProductFamily</type>
+            <attributes>
+                <IntroductionDate>1980-07-31</IntroductionDate>
+				<NumberOfProductsInAction>242</NumberOfProductsInAction>
+            </attributes>
+            <childInstances>
+                <instance>
+                    <name>5000 14E-17B</name>
+                    <type>Product</type>
+                    <attributes>
+						<ProductFamily>Buderus Product Family 1</ProductFamily>
+						<Brand>Buderus</Brand>
+						<ProductId>63035304</ProductId>
+						<Description>RC20*1 EMS</Description>
+                    </attributes>
+                    <childInstances>
+                        <instance>
+							<name>66-2.01</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>5000 14E-17B</Product>
+								<CodingPlugId>66</CodingPlugId>
+								<SoftwareVersion>2.01</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>66-1.5</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>5000 14E-17B</Product>
+								<CodingPlugId>66</CodingPlugId>
+								<SoftwareVersion>1.5</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>88-0.6</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>5000 14E-17B</Product>
+								<CodingPlugId>88</CodingPlugId>
+								<SoftwareVersion>0.6</SoftwareVersion>
+							</attributes>
+						</instance>
+                    </childInstances>
+                </instance>
+                <instance>
+                    <name>5010 116-1EB</name>
+                    <type>Product</type>
+                    <attributes>
+						<ProductFamily>Buderus Product Family 1</ProductFamily>
+						<Brand>Buderus</Brand>
+						<ProductId>7738111112</ProductId>
+						<Description>RC300</Description>
+                    </attributes>
+                    <childInstances>
+                        <instance>
+							<name>158-11.08</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>5010 116-1EB</Product>
+								<CodingPlugId>158</CodingPlugId>
+								<SoftwareVersion>11.08</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>158-11.08</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>5010 116-1EB</Product>
+								<CodingPlugId>158</CodingPlugId>
+								<SoftwareVersion>11.09</SoftwareVersion>
+							</attributes>
+						</instance>
+                    </childInstances>
+                </instance>
+				<instance>
+                    <name>5020 17E-20B</name>
+                    <type>Product</type>
+                    <attributes>
+						<ProductFamily>Buderus Product Family 1</ProductFamily>
+						<Brand>Buderus</Brand>
+						<ProductId>7738100751</ProductId>
+						<Description>GB192-15iT210SW H V2</Description>
+                    </attributes>
+                    <childInstances>
+                    </childInstances>
+                </instance>
+            </childInstances>
+        </instance>
+	    <instance>
+            <name>Buderus Product Family 2</name>
+            <type>ProductFamily</type>
+            <attributes>
+                <IntroductionDate>1995-08-24</IntroductionDate>
+				<NumberOfProductsInAction>42</NumberOfProductsInAction>
+            </attributes>
+            <childInstances>
+                <instance>
+                    <name>8000 10E-60B</name>
+                    <type>Product</type>
+                    <attributes>
+						<ProductFamily>Buderus Product Family 2</ProductFamily>
+						<Brand>Buderus</Brand>
+						<ProductId>7738100270</ProductId>
+						<Description>GB172-24 T150S G20 V2</Description>
+                    </attributes>
+                    <childInstances>
+                        <instance>
+							<name>154-4.05</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>8000 10E-60B</Product>
+								<CodingPlugId>154</CodingPlugId>
+								<SoftwareVersion>4.05</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>154-6.06</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>8000 10E-60B</Product>
+								<CodingPlugId>154</CodingPlugId>
+								<SoftwareVersion>6.06</SoftwareVersion>
+							</attributes>
+						</instance>
+                    </childInstances>
+                </instance>
+                <instance>
+                    <name>8010 763-8EB</name>
+                    <type>Product</type>
+                    <attributes>
+						<ProductFamily>Buderus Product Family 2</ProductFamily>
+						<Brand>Buderus</Brand>
+						<ProductId>7106104</ProductId>
+						<Description>GB162-100 G20</Description>
+                    </attributes>
+                    <childInstances>
+                        <instance>
+							<name>64-2.07</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>8010 763-8EB</Product>
+								<CodingPlugId>64</CodingPlugId>
+								<SoftwareVersion>2.07</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>64-3.02</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>8010 763-8EB</Product>
+								<CodingPlugId>64</CodingPlugId>
+								<SoftwareVersion>3.02</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>64-3.05</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>8010 763-8EB</Product>
+								<CodingPlugId>64</CodingPlugId>
+								<SoftwareVersion>3.05</SoftwareVersion>
+							</attributes>
+						</instance>
+						<instance>
+							<name>64-3.06</name>
+							<type>Configuration</type>
+							<attributes>
+								<Product>8010 763-8EB</Product>
+								<CodingPlugId>64</CodingPlugId>
+								<SoftwareVersion>3.06</SoftwareVersion>
+							</attributes>
+						</instance>
+                    </childInstances>
+                </instance>
+            </childInstances>
+        </instance>
+    </instances>
+</staticData>
