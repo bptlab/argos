@@ -7,6 +7,8 @@ permalink: /documentation/
 ## Structure
 
 1. [Installation](#installation)
+    1. [Prerequisites](#prerequisites)
+    1. [Installation Guide](#installation-guide)
 1. [Configuration](#configuration)
 
 ## Installation
@@ -15,7 +17,7 @@ permalink: /documentation/
 1. [Docker engine](https://www.docker.com/) - version 1.13.0+
 1. [Docker compose](https://docs.docker.com/compose/install/) - version 1.10.0+
 
-### Installation
+### Installation Guide
 
 1. Clone the [argos repository](https://github.com/bptlab/argos).
 
@@ -29,8 +31,8 @@ permalink: /documentation/
 1. Configure external host and database name.
 
     Therefore change the following files according to your needs:
-    - ```argos-deployment/deployment-config/host.env```
-    - ```argos-deployment/deployment-config/database.env```
+    - ```argos/deployment/host.env```
+    - ```argos/deployment/database.env```
 1. (Optional) Change other configuration files.
 
     Refer to [configuration](#configuration) for detailed instructions and configuration possibilities.
