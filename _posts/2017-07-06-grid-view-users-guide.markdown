@@ -11,7 +11,7 @@ The Grid-View is divided into 4 major components. An entity hierarchy, a search 
 
 # Entity type hierarchy
 
-<video width="320" height="240" controls>
+<video style="width: 100%; height: auto;" autoplay>
   <source src="/argos/resources/grid-view-hierarchy.webm" type="video/webm">
   Your browser does not support the video tag.
 </video>
