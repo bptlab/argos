@@ -21,4 +21,7 @@ It is build to provide an graphical user interface for all REST routes provided 
 
 ![ArgosFrontend Architecture](/argos/resources/frontend/argos-frontend-architecture.png)
 
-Shown above is an abstract class diagram, displaying the architecture of the ArgosFrontend.
+Shown above is an abstract class diagram, displaying the architecture of the ArgosFrontend. 
+All react components are displayed as classes. For the purpose of clarity, all existing compositions have been removed from view components.
+An execption to this is the *SettingsView* component. Beein representative for all other View components, it shows significant compositions.
+The *Utils* class encapsulates several helper functions and continously used UI-elements. 
