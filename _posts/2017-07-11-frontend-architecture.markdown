@@ -9,11 +9,7 @@ categories: argos frontend developer documentation
 
 1. [The Argos Philosophy](#The-Argos-Philosophy)
 1. [Architecture](#Architecture)
-    1. [DatabaseAccess](#DatabaseAccess)
-    2. [EventReceiver](#EventReceiver)
-    3. [EventSubscriber](#EventSubscriber)
-    4. [ArtifactInterface](#ArtifactInterface)
-    5. [NotificationService](#NotificationService)
+
 
 
 ## The Argos Philosophy
@@ -26,13 +22,3 @@ It is build to provide an graphical user interface for all REST routes provided 
 ![ArgosFrontend Architecture](/argos/resources/frontend/argos-frontend-architecture.png)
 
 Shown above is an abstract class diagram, displaying the architecture of the ArgosFrontend.
-
-### DatabaseAccess
-
-### EventReceiver
-
-### EventSubscriber
-
-### ArtifactInterface
-
-### NotificationService
