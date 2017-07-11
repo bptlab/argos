@@ -17,7 +17,7 @@ The Settings-View can be entered over the gear wheel icon in the top right corne
 
 ## Event Types
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/settings-view-event-types.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
@@ -26,7 +26,7 @@ While entering the Settings-View, all event types are displayed as collapsed car
 
 ### Event Type Attributes
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/settings-view-event-type-attributes.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
@@ -35,7 +35,7 @@ While expanding a card of an event type, the first tab labeled "Attributes" will
 
 ### Event Queries
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/settings-view-event-queries.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
@@ -44,7 +44,7 @@ The second tab labeled "Event Queries" displays all queries for a certain event 
 
 ### Event-Entity-Mappings
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/settings-view-event-entity-mappings.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>

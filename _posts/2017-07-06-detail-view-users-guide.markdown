@@ -17,7 +17,7 @@ The Detail-View is divided into 4 major components. Entity details, an events ov
 
 ## Entity Details
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/detail-view-entity-details.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
@@ -26,7 +26,7 @@ Entity details show a set of attributes and their values for the currently selec
 
 ## Events over Time Diagram
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/detail-view-events-over-time-diagram.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
@@ -35,7 +35,7 @@ The events over time diagram gives an overview of displayed events of a selected
 
 ## Filter Bar
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/detail-view-filter-bar.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
@@ -44,7 +44,7 @@ The filter bar limits the event table displayed below. It is possible to filter 
 
 ## Event Table
 
-<video style="width: 100%; height: auto;" autoplay loop>
+<video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
   <source src="/argos/resources/detail-view-event-table.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
