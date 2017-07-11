@@ -8,13 +8,32 @@ categories: argos backend developer documentation
 ### Content
 
 1. [The Argos Philosophy](#The-Argos-Philosophy)
-    1. [Architecture](#Architecture)
+1. [Architecture](#Architecture)
+    1. [DatabaseAccess](#DatabaseAccess)
+    2. [EventReceiver](#EventReceiver)
+    3. [EventSubscriber](#EventSubscriber)
+    4. [ArtifactInterface](#ArtifactInterface)
+    5. [NotificationService](#NotificationService)
+ 
 
 ## The Argos Philosophy
 
 The ArgosBackend (**AB**) is a [Java 8](https://www.java.com/en/download/faq/java8.xml) application, which uses [Maven](https://maven.apache.org/) for project management.
 It is build to be as flexible as possible, allowing future egineers to extend the functionality. Thus, some critical design decisions will be depicted in the following chapters.
 
-### Architecture
+## Architecture
 
-![ArgosBackend Architecture](/agros/resources/backend/argos-backend-architecture.png)
+![ArgosBackend Architecture](/argos/resources/backend/argos-backend-architecture.png)
+
+Shown above is the abstract architecture of the ArgosBackend, as well as the EventProcessingPlatform and the ArgosFrontend. The latter two are not of our interest at this point, therefore they are only shown as black boxes.
+The ArgosBackend consists of five main components.
+
+### DatabaseAccess
+
+### EventReceiver
+
+### EventSubscriber
+
+### ArtifactInterface
+
+### NotificationService
