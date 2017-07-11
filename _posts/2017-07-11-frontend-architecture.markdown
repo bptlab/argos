@@ -23,7 +23,7 @@ It is build to provide an graphical user interface for all REST routes provided 
 
 ## Architecture
 
-![ArgosBackend Architecture](/argos/resources/backend/argos-frontend-architecture.png)
+![ArgosBackend Architecture](/argos/resources/frontend/argos-frontend-architecture.png)
 
 Shown above is an abstract class diagram, displaying the architecture of the ArgosFrontend.
 
