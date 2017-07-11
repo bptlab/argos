@@ -7,6 +7,14 @@ categories: jekyll update documentation
 
 The Detail-View is divided into 4 major components. Entity details, an events over time diagram, a filter bar and a table showing all events of a certain event type. This view shows details to a selected entity. Entities depend on data and can, for example, be products, product categories or parts.
 
+## Structure
+
+1. Detail-View
+    1. [Entity Details](#entity-details)
+    1. [Events over Time Diagram](#events-over-time-diagram)
+    1. [Filter Bar](#filter-bar)
+    1. [Event Table](#event-table)
+
 ## Entity Details
 
 <video style="width: 100%; height: auto;" autoplay loop>

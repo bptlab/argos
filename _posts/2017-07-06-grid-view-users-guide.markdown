@@ -7,6 +7,14 @@ categories: jekyll update documentation
 
 The Grid-View is divided into 4 major components. An entity hierarchy, a search bar, a state distribution diagram and a grid showing all entities of a hierarchy level.
 
+## Structure
+
+1. Grid-View
+    1. [Entity Type Hierarchy](#entity-type-hierarchy)
+    1. [Search Bar](#search-bar)
+    1. [State Distribution Diagram](#state-distribution-diagram)
+    1. [Entity Grid](#entity-grid)
+
 ## Entity Type Hierarchy
 
 <video style="width: 100%; height: auto;" autoplay loop>
