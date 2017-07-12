@@ -9,14 +9,16 @@ categories: argos backend developer documentation
 
 1. [The Argos Philosophy](#the-argos-philosophy)
 1. [Architecture](#architecture)
-  1. [Storage](#storage)
-    1. [DatabaseAccess](#databaseaccess)
-    2. [PersistenceAdapter](#persistenceadapter)
-    3. [Observable](#observable)
-  1. [EventProcessing](#eventprocessing)
-  1. [EventSubscriber](#eventsubscriber)
-  1. [API](#api)
-  1. [Notifications](#notifications)
+    1. [Storage](#storage)
+        1. [DatabaseAccess](#databaseaccessimpl)
+        1. [PersistenceAdapter](#persistenceadapterimpl)
+        1. [Observable](#observableimpl)
+    1. [EventProcessing](#eventprocessing)
+        1. [EventCreationObservable](#eventcreationobservable)
+        1. [EventMappingObservable](#eventmappingobservable)
+    1. [EventSubscriber](#eventsubscriber)
+    1. [API](#api)
+    1. [Notifications](#notifications)
  
 
 ## The Argos Philosophy
@@ -184,9 +186,175 @@ Additionally, the EventReceiverImpl has two different Observables.
 
 #### EventCreationObservable
 
-The EventCreationObservable accepts EventCreationObservers. These are interested in new events, which are received by the EventReceiverImpl. By default, one instance of the EventEntityMapperImpl is subscribed to the EventCreationObservable.
+The EventCreationObservable accepts EventCreationObservers. These are interested in new events, which are received by the EventReceiverImpl. 
 
-As the name already suggests, this instance will try to map the received event to an entity in the database. This is done by using the EventEntityMapping - if there is one for the EventType.
+---
+__Default behavior__:
+
+By default, one instance of the EventEntityMapperImpl class is subscribed to the EventCreationObservable. As the name already suggests, this instance will try to map the received events to an entity in the database. This is done by using the EventEntityMapping - if there is one for the EventType.
+
+__IMPORTANT__:<a name="Important-EventCreationObservable"></a>
+
+The ObserverCallOrder for the EventCreationObservable is set to `LAST_IN_FIRST_OUT`, by default. This means, that every new EventCreationObserver will be called __BEFORE__ the EventEntityMapperImpl is notified. This means, that the default logic of the EventEntityMapperImpl is only exeucted, if - and only if - the received event is not mapped yet.
+
+---
+__Custom behavior__:
+
+The implemented observer pattern allows for great flexibility, allowing very easy extensions to the existing architecture.
+
+For an example, lets say, that we want to map every event to a special entity.<br>
+Your code could look something like that:
+```java
+/**
+  * Application start method.
+  * @param args - command line arguments
+  */
+public static void main(String[] args) {
+	...
+    
+	Argos argos = ArgosImpl.run();
+	try {
+      argos.addEventEntityMapper(new EventCreationObserver() {
+        @Override
+        public void onEventCreated(EventEntityMappingStatus mappingStatus, 
+                                    EventType eventType, 
+                                    List<TypeAttribute> eventTypeAttributes, 
+                                    Event event, 
+                                    List<Attribute> eventAttributes) {
+			
+            // do not continue, if the event was mapped already
+            if (mappingStatus.isMapped()) {
+				return;
+            }
+			
+            // get the special entity we want to map all the events to
+    		Entity yourSpecialEntity = PersistenceAdapterImpl.getInstance()
+    									.getEntity(YOUR_ENTITY_ID);
+            
+            // set our special entity as owner of the event
+            mappingStatus.setEventOwner(yourSpecialEntity);
+            
+            // also update the current status of our special entity
+            mappingStatus.getStatusUpdateStatus().setNewStatus("YOUR NEW STATUS");
+      	}
+      });
+    } catch (ArgosNotRunningException e) {
+    	// argos is not running
+    }
+}
+```
+
+The example above shows, how you can add custom mapping and status update logic. All you need is a running Argos instance.
+
+First, we gonna make sure, that the event is not mapped yet. This is very important to prevent unwanted behavior.<br>
+Afterwards, we will fetch a special entity from the database using the PersistanceAdapterImpl. After that, we are manipulating the `mappingStatus`, setting the entity to which the received event should belong. Additionally, we are changing the status of the event owner.
+
+This observer will be called whenever a new event was received. Please note, that the default logic will still be executed. This means, that the default mapping is executed if you did not set the event owner yourself.
+
+#### EventMappingObservable
+
+The EventMappingObservable works just like the EventCreationObservable. The only thing that changes is the default behavior and the trigger reason.
+
+For the reason - which should be pretty obvious at this point - we have the mapping of an event. So whenever an event is received and then mapped to a special entity, this Observable will notify all of its observers.
+
+---
+__Default behavior__:
+
+By default, one instance of the EntityStatusCalculatorImpl class is subscribed to the EventMappingObservable. This instance will check, whether the status was updated already and - if this is not the case - try to update the status. This update is based on the used EventEntityMapping. If there is no mapping (when you made the mapping yourself for example), the status will not be affected.
+
+__IMPORTANT__:
+
+One again, the ObserverCallOrder of the EventMappingObservable is set to `LAST_IN_FIRST_OUT`, by default. This has the same effect as mentioned [above](#Important-EventCreationObservable).
+
+---
+__Custom behavior__:
+
+Following the example for the EventCreationObservable, you can again control the mapping yourself.<br>
+Your code could look like this:
+```java
+/**
+  * Application start method.
+  * @param args - command line arguments
+  */
+public static void main(String[] args) {
+	...
+    
+	Argos argos = ArgosImpl.run();
+	try {
+      argos.addEntityStatusCalculator(new EventMappingObserver() {
+        @Override
+        public void onEventMapped(EventEntityMappingStatus processStatus) {
+
+			// do not continue, if the status was updated already
+            if (processStatus.getStatusUpdateStatus().isStatusUpdated()) {
+              return;
+            }
+			
+            // get the event as well as the event owner
+            Event event = processStatus.getEvent();
+            Entity eventOwner = processStatus.getEventOwner();
+
+			// how many of these events were already received?
+            int numberOfEvents = PersistenceAdapterImpl.getInstance().
+                                  getEventCountOfEntity(eventOwner.getId(), 
+                                      event.getTypeId());
+
+			// is the amount of events critical already?
+            if (numberOfEvents <= NOT_CRITICAL) {
+              processStatus.getStatusUpdateStatus().setNewStatus("NOT CRITICAL");
+            } else {
+              processStatus.getStatusUpdateStatus().setNewStatus("CRITICAL");
+            }
+          }
+      });
+    } catch (ArgosNotRunningException e) {
+    	// argos is not running
+    }
+}
+```
+
+This example depicts the way of add a new EventMappingObserver to the AB.
+
+So what we are doing is quite simple:<br>
+First, check whether the status was changed already. If so, do not continue our custom logic.<br>
+If not, then get the total amount of events for the event owner and the event type. If the amount is beyond a certain threshold, update the status of the event owner accordingly.
+
+When we made the decision to implement this kind of observer pattern we hoped to create a great interface for future extensions. When looking at the code, it is indeed very simple to change the behavior of the system while also keeping some default logic - just in case.
+
+#### Event Creation
+
+Now, that we have seen two points for future extensions, we want to take a look at the overall process of event creation. The event creation is also part of the EventReceiverImpl and looks like this:
+```java
+/**
+  * This method creates a new event from a given request body.
+  * @param requestBody - the request body to parse
+  * @param eventType - the eventType of the new event
+  */
+private void createEvent(String requestBody, EventType eventType);
+```
+
+This method is called, whenever a new event was received. What it does is quite a lot:
+
+1. Parse the received requestBody
+
+Since the events will be received as JSON, we need to create a Java object from the body.
+
+2. Validate the received event
+
+To prevent errors while processing the received event, we need to make sure everything is just fine. Therefore, the EventReceiverImpl will check whether the event contains all the defined attributes. If there is one missing, the attribute will be added with an empty value.
+
+3. Notify all the EventCreationObservers
+
+As we have just seen, the mapping of the received events is realized using the EventCreationObservable. Therefore, we need to notify all of its observers.
+
+4. Notify all the EventMappingObservers
+
+After all EventCreationObservers have done their job, the event is mapped. If not - because their is no mapping defined for example - the process stops.<br>
+Otherwise, the EventMappingObservers are notified to update the status of the event owner.
+
+5. Store the event in the database
+
+If everyhing went well up until this point, we want to make sure the event is stored in the database. This will automatically trigger a web socket notification for connected AFs.
 
 ### EventSubscriber
 
