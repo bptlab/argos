@@ -16,6 +16,7 @@ categories: argos backend developer documentation
     1. [EventProcessing](#eventprocessing)
         1. [EventCreationObservable](#eventcreationobservable)
         1. [EventMappingObservable](#eventmappingobservable)
+        1. [Event Creation](#event-creation)
     1. [EventSubscriber](#eventsubscriber)
     1. [API](#api)
     1. [Notifications](#notifications)
@@ -214,29 +215,29 @@ public static void main(String[] args) {
     
 	Argos argos = ArgosImpl.run();
 	try {
-      argos.addEventEntityMapper(new EventCreationObserver() {
-        @Override
-        public void onEventCreated(EventEntityMappingStatus mappingStatus, 
-                                    EventType eventType, 
-                                    List<TypeAttribute> eventTypeAttributes, 
-                                    Event event, 
-                                    List<Attribute> eventAttributes) {
-			
-            // do not continue, if the event was mapped already
-            if (mappingStatus.isMapped()) {
-				return;
-            }
-			
-            // get the special entity we want to map all the events to
-    		Entity yourSpecialEntity = PersistenceAdapterImpl.getInstance()
-    									.getEntity(YOUR_ENTITY_ID);
-            
-            // set our special entity as owner of the event
-            mappingStatus.setEventOwner(yourSpecialEntity);
-            
-            // also update the current status of our special entity
-            mappingStatus.getStatusUpdateStatus().setNewStatus("YOUR NEW STATUS");
-      	}
+      	argos.addEventEntityMapper(new EventCreationObserver() {
+          @Override
+          public void onEventCreated(EventEntityMappingStatus mappingStatus, 
+                                      EventType eventType, 
+                                      List<TypeAttribute> eventTypeAttributes, 
+                                      Event event, 
+                                      List<Attribute> eventAttributes) {
+
+              // do not continue, if the event was mapped already
+              if (mappingStatus.isMapped()) {
+                  return;
+              }
+
+              // get the special entity we want to map all the events to
+              Entity yourSpecialEntity = PersistenceAdapterImpl.getInstance()
+                                          .getEntity(YOUR_ENTITY_ID);
+
+              // set our special entity as owner of the event
+              mappingStatus.setEventOwner(yourSpecialEntity);
+
+              // also update the current status of our special entity
+              mappingStatus.getStatusUpdateStatus().setNewStatus("YOUR NEW STATUS");
+          }
       });
     } catch (ArgosNotRunningException e) {
     	// argos is not running
@@ -281,31 +282,31 @@ public static void main(String[] args) {
     
 	Argos argos = ArgosImpl.run();
 	try {
-      argos.addEntityStatusCalculator(new EventMappingObserver() {
-        @Override
-        public void onEventMapped(EventEntityMappingStatus processStatus) {
+    	argos.addEntityStatusCalculator(new EventMappingObserver() {
+          @Override
+          public void onEventMapped(EventEntityMappingStatus processStatus) {
 
-			// do not continue, if the status was updated already
-            if (processStatus.getStatusUpdateStatus().isStatusUpdated()) {
-              return;
+              // do not continue, if the status was updated already
+              if (processStatus.getStatusUpdateStatus().isStatusUpdated()) {
+                return;
+              }
+
+              // get the event as well as the event owner
+              Event event = processStatus.getEvent();
+              Entity eventOwner = processStatus.getEventOwner();
+
+              // how many of these events were already received?
+              int numberOfEvents = PersistenceAdapterImpl.getInstance().
+                                    getEventCountOfEntity(eventOwner.getId(), 
+                                        event.getTypeId());
+
+              // is the amount of events critical already?
+              if (numberOfEvents <= NOT_CRITICAL) {
+                processStatus.getStatusUpdateStatus().setNewStatus("NOT CRITICAL");
+              } else {
+                processStatus.getStatusUpdateStatus().setNewStatus("CRITICAL");
+              }
             }
-			
-            // get the event as well as the event owner
-            Event event = processStatus.getEvent();
-            Entity eventOwner = processStatus.getEventOwner();
-
-			// how many of these events were already received?
-            int numberOfEvents = PersistenceAdapterImpl.getInstance().
-                                  getEventCountOfEntity(eventOwner.getId(), 
-                                      event.getTypeId());
-
-			// is the amount of events critical already?
-            if (numberOfEvents <= NOT_CRITICAL) {
-              processStatus.getStatusUpdateStatus().setNewStatus("NOT CRITICAL");
-            } else {
-              processStatus.getStatusUpdateStatus().setNewStatus("CRITICAL");
-            }
-          }
       });
     } catch (ArgosNotRunningException e) {
     	// argos is not running
@@ -335,24 +336,24 @@ private void createEvent(String requestBody, EventType eventType);
 
 This method is called, whenever a new event was received. What it does is quite a lot:
 
-1. Parse the received requestBody
+* Parse the received requestBody
 
 Since the events will be received as JSON, we need to create a Java object from the body.
 
-2. Validate the received event
+* Validate the received event
 
 To prevent errors while processing the received event, we need to make sure everything is just fine. Therefore, the EventReceiverImpl will check whether the event contains all the defined attributes. If there is one missing, the attribute will be added with an empty value.
 
-3. Notify all the EventCreationObservers
+* Notify all the EventCreationObservers
 
 As we have just seen, the mapping of the received events is realized using the EventCreationObservable. Therefore, we need to notify all of its observers.
 
-4. Notify all the EventMappingObservers
+* Notify all the EventMappingObservers
 
 After all EventCreationObservers have done their job, the event is mapped. If not - because their is no mapping defined for example - the process stops.<br>
 Otherwise, the EventMappingObservers are notified to update the status of the event owner.
 
-5. Store the event in the database
+* Store the event in the database
 
 If everyhing went well up until this point, we want to make sure the event is stored in the database. This will automatically trigger a web socket notification for connected AFs.
 
