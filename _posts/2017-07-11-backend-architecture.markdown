@@ -23,7 +23,7 @@ It is build to be as flexible as possible, allowing future egineers to extend th
 
 ## Architecture
 
-![ArgosBackend Architecture](/argos/resources/backend/agros-backend-architecture.png "ArgosBackend Architecture Overview")
+![ArgosBackend Architecture](/argos/resources/backend/argos-backend-architecture.png "ArgosBackend Architecture Overview")
 
 Shown above is the abstract architecture of the AB, as well as the EventProcessingPlatform (**EPP**) and the ArgosFrontend (**AF**). The latter two are not of our interest at this point, therefore they are only shown as black boxes.
 The AB consists of five main components.
@@ -43,24 +43,24 @@ The DatabaseAccessImpl implements only a few generic methods, which are very fle
 
 For example:
 ```java
-	/**
-	 * This method executes a query in a certain transaction context while a session is 
-	 * open and returns the result or a default value.
-	 * @param session - the database session, which must be open
-	 * @param query - the query to execute and to retrieve the results from
-	 * @param transaction - the current transaction
-	 * @param getValue - the function to get the results from the query
-	 * @param defaultValue - a fall back default value in case anything went wrong or no 
-	 * entities were found
-	 * @param <ResultType> - the result type
-	 * @param <QueryType> - the query type
-	 * @return - an object of the result value type
-	 */
-    public <ResultType, QueryType> ResultType getArtifacts(Session session,
-                                                            Query<QueryType> query,
-                                                            Transaction transaction,
-                                                            Callable<ResultType> getValue,
-                                                            ResultType defaultValue);
+/**
+  * This method executes a query in a certain transaction context while a session is 
+  * open and returns the result or a default value.
+  * @param session - the database session, which must be open
+  * @param query - the query to execute and to retrieve the results from
+  * @param transaction - the current transaction
+  * @param getValue - the function to get the results from the query
+  * @param defaultValue - a fall back default value in case anything went wrong or no 
+  * entities were found
+  * @param <ResultType> - the result type
+  * @param <QueryType> - the query type
+  * @return - an object of the result value type
+  */
+<ResultType, QueryType> ResultType getArtifacts(Session session,
+                                                Query<QueryType> query,
+                                                Transaction transaction,
+                                                Callable<ResultType> getValue,
+                                                ResultType defaultValue);
 ```
 
 Since those methods have very complex signatures, they are not shown completely in the class diagram. Although these methods are too complex for the class diagram, we made sure to write JavaDocs - as shown in the example - for every method in the entire AB. Therefore, you should find some more help when inspecting the actual source code.
@@ -72,19 +72,19 @@ The PersistenceAdapterImpl is a singleton wrapper for the DatabaseAccessImpl. It
 
 Methods offered by the PersistenceAdapterImpl generally look like this:
 ```java
-	/**
-	 * This method returns a eventQuery with given id.
-	 * @param eventQueryId - the unique identifier of the eventQuery
-	 * @return - the eventQuery with matching id
-	 */
-     public EventQuery getEventQuery(long eventQueryId);
+/**
+  * This method returns a eventQuery with given id.
+  * @param eventQueryId - the unique identifier of the eventQuery
+  * @return - the eventQuery with matching id
+  */
+EventQuery getEventQuery(long eventQueryId);
      
-    /**
-	 * This method returns a list of events, which belong to a specific eventType.
-	 * @param eventTypeId - the unique identifier of the eventType
-	 * @return - a list of events, which belong to a specific eventType
-	 */
-	public List<Event> getEventsOfEventType(long eventTypeId);
+/**
+  * This method returns a list of events, which belong to a specific eventType.
+  * @param eventTypeId - the unique identifier of the eventType
+  * @return - a list of events, which belong to a specific eventType
+  */
+List<Event> getEventsOfEventType(long eventTypeId);
 ```
 
 They are much easier to use and understand than the generic methods of the DatabaseAccessImpl.
@@ -92,23 +92,23 @@ Additionally, since the PersistenceAdapterImpl is implemented using the singleto
 
 Besides data fetching, the PersistenceAdapterImpl also offeres method for manipulating artifacts in the database. You get to chose between two different methods:
 ```java
-	/**
-	 * This method saves/updates a list of persistenceArtifacts. Connected web socket 
-	 * clients will *not* be notified.
-	 * @param artifacts - the artifacts to save/update
-	 * @return - true, if all artifacts were saved/updated
-	 */
-	public boolean saveArtifacts(PersistenceArtifact... artifacts);
+/**
+  * This method saves/updates a list of persistenceArtifacts. Connected web socket 
+  * clients will *not* be notified.
+  * @param artifacts - the artifacts to save/update
+  * @return - true, if all artifacts were saved/updated
+  */
+boolean saveArtifacts(PersistenceArtifact... artifacts);
     
-    /**
-	 * This method saves a new artifact in the database and notifies connected web socket 
-	 * clients.
-	 * @param artifact - the artifact to save
-	 * @param fetchUri - the uri, where connected web socket clients can fetch the new 
-	 * artifact from
-	 * @return - true, if the artifact was stored in the database
-	 */
-	public boolean createArtifact(PersistenceArtifact artifact, String fetchUri);
+/**
+  * This method saves a new artifact in the database and notifies connected web socket 
+  * clients.
+  * @param artifact - the artifact to save
+  * @param fetchUri - the uri, where connected web socket clients can fetch the new 
+  * artifact from
+  * @return - true, if the artifact was stored in the database
+  */
+boolean createArtifact(PersistenceArtifact artifact, String fetchUri);
 ```
 
 This redundancy is given for all three main operations:
