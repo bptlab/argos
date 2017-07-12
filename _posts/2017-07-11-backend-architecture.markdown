@@ -10,25 +10,28 @@ categories: argos backend developer documentation
 1. [The Argos Philosophy](#The-Argos-Philosophy)
 1. [Architecture](#Architecture)
     1. [Storage](#Storage)
-    2. [EventReceiver](#EventReceiver)
+    	1. [DatabaseAccess](#DatabaseAccess)
+    	2. [PersistenceAdapter](#PersistenceAdapter)
+    	3. [Observable](#Observable)
+    2. [EventProcessing](#EventProcessing)
     3. [EventSubscriber](#EventSubscriber)
     4. [API](#API)
     5. [Notifications](#Notifications)
  
 
-## The Argos Philosophy
+## The Argos Philosophy<a name="The-Argos-Architecture"></a>
 
 The ArgosBackend (**AB**) is a [Java 8](https://www.java.com/en/download/faq/java8.xml) application, which uses [Maven](https://maven.apache.org/) for project management.
 It is build to be as flexible as possible, allowing future egineers to extend the functionality. Thus, some critical design decisions will be depicted in the following chapters.
 
-## Architecture
+## Architecture<a name="Architecture"></a>
 
 ![ArgosBackend Architecture](/argos/resources/backend/argos-backend-architecture.png "ArgosBackend Architecture Overview")
 
 Shown above is the abstract architecture of the AB, as well as the EventProcessingPlatform (**EPP**) and the ArgosFrontend (**AF**). The latter two are not of our interest at this point, therefore they are only shown as black boxes.
 The AB consists of five main components.
 
-### Storage
+### Storage<a name="Storage"></a>
 
 The Storage component is the central point for everything, which must communicate with the database. Thus, there are a lot of methods to create, update, delete and fetch artifacts of all kinds from the database.
 
@@ -37,7 +40,7 @@ The Storage component is the central point for everything, which must communicat
 Shown above are the most relevant classes of the Storage component. You will notice, that the only non-abstract implementations are the DatabaseAccessImpl and the PersistenceAdapterImpl. These two take responsibility for any kind of data exchange with the database.
 
 ---
-__DatabaseAccessImpl__
+__DatabaseAccessImpl__<a anem="DatabaseAccess"></a>
 
 The DatabaseAccessImpl implements only a few generic methods, which are very flexible and can be adapted to fit almost every scenario.
 
@@ -66,7 +69,7 @@ For example:
 Since those methods have very complex signatures, they are not shown completely in the class diagram. Although these methods are too complex for the class diagram, we made sure to write JavaDocs - as shown in the example - for every method in the entire AB. Therefore, you should find some more help when inspecting the actual source code.
 
 ---
-__PersistenceAdapterImpl__
+__PersistenceAdapterImpl__<a name="PersistenceAdapter"></a>
 
 The PersistenceAdapterImpl is a singleton wrapper for the DatabaseAccessImpl. It provides a lot of methods for fetching artifacts from the database. Furthermore, it also inherits from the ObservableImpl. This will come into play later on.
 
@@ -118,13 +121,65 @@ This redundancy is given for all three main operations:
 
 The first option is always to just create/update/delete a chunk of artifacts. The latter will only affect one artifact. But - as you might have already read in the JavaDoc - the first method will not send any notifications to the AF while the second option will. Thus, it depends on the situation which option you have to use.
 
-Speaking of the notifications: This is where the inherited behavior of the ObservableImpl becomes important. Since the PersistenceAdapterImpl is the central point of database communication, it is perfectly suited to trigger web socket notifications. In order to do so, the observer pattern is implemented. This will enable an extensible way of observing the database, which is used by the Notifications component already. You will find more information [here](#Notifications). 
+---
+__ObservableImpl__<a name="Observable"></a>
+
+Speaking of the notifications: This is where the inherited behavior of the ObservableImpl becomes important. Since the PersistenceAdapterImpl is the central point of database communication, it is perfectly suited to trigger web socket notifications. In order to do so, the observer pattern is implemented. This will enable an extensible way of observing the database, which is used by the Notifications component already. 
+
+The implementation of this notification trigger will look like this:
+
+```java
+/**
+ * This interface represents observable objects.
+ * @param <Observer> - the observer type
+ */
+public interface Observable<Observer> {
+
+	/**
+	 * This method invokes a method for each observer.
+	 * @param notifyMethod - the method to invoke for each observer
+	 */
+	void notifyObservers(Consumer<Observer> notifyMethod);
+    
+    ...
+}
+
+/**
+ * This class offers methods to retrieve and store artifacts.
+ */
+public final class PersistenceAdapterImpl 
+	extends ObservableImpl<PersistenceArtifactUpdateObserver> 
+	implements PersistenceAdapter {
+    
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean createArtifact(PersistenceArtifact artifact, String fetchUri) {
+    if (!saveArtifacts(artifact)) {
+      return false;
+    }
+
+    notifyObservers((PersistenceArtifactUpdateObserver observer) ->
+      observer.onArtifactUpdated(PersistenceArtifactUpdateType.CREATE, 
+      							artifact, fetchUri));
+
+    return true;
+  }
+  
+  ...
+}
+```
+
+When an artifact gets stored, the PersistenceAdapterImpl calls the inherited `notifyObservers` method passing a lambda expression as parameter. This expression will then be executed for each of the registered observers. Thus, every observer will be notified about the data changes. 
+
+The Notifications component is also one of the observers. Therefore, it is able to generate a web socket notification, which contains the current change. You will find more information [here](#Notifications). 
 
 
-### EventReceiver
+### EventProcessing<a name="EventProcessing"></a>
 
-### EventSubscriber
+### EventSubscriber<a name="EventSubscriber"></a>
 
-### API
+### API<a name="API"></a>
 
-### Notifications
+### Notifications<a name="Notifications"></a>
