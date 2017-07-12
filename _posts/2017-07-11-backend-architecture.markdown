@@ -148,26 +148,26 @@ public interface Observable<Observer> {
  * This class offers methods to retrieve and store artifacts.
  */
 public final class PersistenceAdapterImpl 
-	extends ObservableImpl<PersistenceArtifactUpdateObserver> 
-	implements PersistenceAdapter {
-    
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean createArtifact(PersistenceArtifact artifact, String fetchUri) {
-    if (!saveArtifacts(artifact)) {
-      return false;
+              extends ObservableImpl<PersistenceArtifactUpdateObserver> 
+              implements PersistenceAdapter {
+
+    /**
+    * {@inheritDoc}
+    */
+    @Override
+    public boolean createArtifact(PersistenceArtifact artifact, String fetchUri) {
+        if (!saveArtifacts(artifact)) {
+        	return false;
+        }
+
+        notifyObservers((PersistenceArtifactUpdateObserver observer) ->
+        observer.onArtifactUpdated(PersistenceArtifactUpdateType.CREATE, 
+        artifact, fetchUri));
+
+        return true;
     }
 
-    notifyObservers((PersistenceArtifactUpdateObserver observer) ->
-      observer.onArtifactUpdated(PersistenceArtifactUpdateType.CREATE, 
-      							artifact, fetchUri));
-
-    return true;
-  }
-  
-  ...
+    ...
 }
 ```
 
@@ -213,32 +213,32 @@ Your code could look something like that:
 public static void main(String[] args) {
 	...
     
-	Argos argos = ArgosImpl.run();
-	try {
-      	argos.addEventEntityMapper(new EventCreationObserver() {
-          @Override
-          public void onEventCreated(EventEntityMappingStatus mappingStatus, 
-                                      EventType eventType, 
-                                      List<TypeAttribute> eventTypeAttributes, 
-                                      Event event, 
-                                      List<Attribute> eventAttributes) {
+    Argos argos = ArgosImpl.run();
+    try {
+        argos.addEventEntityMapper(new EventCreationObserver() {
+            @Override
+            public void onEventCreated(EventEntityMappingStatus mappingStatus, 
+                                        EventType eventType, 
+                                        List<TypeAttribute> eventTypeAttributes, 
+                                        Event event, 
+                                        List<Attribute> eventAttributes) {
 
-              // do not continue, if the event was mapped already
-              if (mappingStatus.isMapped()) {
-                  return;
-              }
+                // do not continue, if the event was mapped already
+                if (mappingStatus.isMapped()) {
+                return;
+                }
 
-              // get the special entity we want to map all the events to
-              Entity yourSpecialEntity = PersistenceAdapterImpl.getInstance()
-                                          .getEntity(YOUR_ENTITY_ID);
+                // get the special entity we want to map all the events to
+                Entity yourSpecialEntity = PersistenceAdapterImpl.getInstance()
+                .getEntity(YOUR_ENTITY_ID);
 
-              // set our special entity as owner of the event
-              mappingStatus.setEventOwner(yourSpecialEntity);
+                // set our special entity as owner of the event
+                mappingStatus.setEventOwner(yourSpecialEntity);
 
-              // also update the current status of our special entity
-              mappingStatus.getStatusUpdateStatus().setNewStatus("YOUR NEW STATUS");
-          }
-      });
+                // also update the current status of our special entity
+                mappingStatus.getStatusUpdateStatus().setNewStatus("YOUR NEW STATUS");
+            }
+        });
     } catch (ArgosNotRunningException e) {
     	// argos is not running
     }
@@ -278,36 +278,36 @@ Your code could look like this:
   * @param args - command line arguments
   */
 public static void main(String[] args) {
-	...
-    
-	Argos argos = ArgosImpl.run();
-	try {
-    	argos.addEntityStatusCalculator(new EventMappingObserver() {
-          @Override
-          public void onEventMapped(EventEntityMappingStatus processStatus) {
+    ...
 
-              // do not continue, if the status was updated already
-              if (processStatus.getStatusUpdateStatus().isStatusUpdated()) {
-                return;
-              }
+    Argos argos = ArgosImpl.run();
+    try {
+        argos.addEntityStatusCalculator(new EventMappingObserver() {
+            @Override
+            public void onEventMapped(EventEntityMappingStatus processStatus) {
 
-              // get the event as well as the event owner
-              Event event = processStatus.getEvent();
-              Entity eventOwner = processStatus.getEventOwner();
+                // do not continue, if the status was updated already
+                if (processStatus.getStatusUpdateStatus().isStatusUpdated()) {
+                	return;
+                }
 
-              // how many of these events were already received?
-              int numberOfEvents = PersistenceAdapterImpl.getInstance().
-                                    getEventCountOfEntity(eventOwner.getId(), 
-                                        event.getTypeId());
+                // get the event as well as the event owner
+                Event event = processStatus.getEvent();
+                Entity eventOwner = processStatus.getEventOwner();
 
-              // is the amount of events critical already?
-              if (numberOfEvents <= NOT_CRITICAL) {
-                processStatus.getStatusUpdateStatus().setNewStatus("NOT CRITICAL");
-              } else {
-                processStatus.getStatusUpdateStatus().setNewStatus("CRITICAL");
-              }
+                // how many of these events were already received?
+                int numberOfEvents = PersistenceAdapterImpl.getInstance().
+                                      getEventCountOfEntity(eventOwner.getId(), 
+                                      	event.getTypeId());
+
+                // is the amount of events critical already?
+                if (numberOfEvents <= NOT_CRITICAL) {
+                	processStatus.getStatusUpdateStatus().setNewStatus("NOT CRITICAL");
+                } else {
+                	processStatus.getStatusUpdateStatus().setNewStatus("CRITICAL");
+                }
             }
-      });
+        });
     } catch (ArgosNotRunningException e) {
     	// argos is not running
     }
