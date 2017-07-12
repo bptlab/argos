@@ -5,33 +5,33 @@ date:   2017-07-11 13:00:00 +0200
 categories: argos backend developer documentation
 ---
 
-### Content
+## Content
 
-1. [The Argos Philosophy](#The-Argos-Philosophy)
-1. [Architecture](#Architecture)
-    1. [Storage](#Storage)
-    	1. [DatabaseAccess](#DatabaseAccess)
-    	2. [PersistenceAdapter](#PersistenceAdapter)
-    	3. [Observable](#Observable)
-    2. [EventProcessing](#EventProcessing)
-    3. [EventSubscriber](#EventSubscriber)
-    4. [API](#API)
-    5. [Notifications](#Notifications)
+1. [The Argos Philosophy](#the-argos-philosophy)
+1. [Architecture](#architecture)
+  1. [Storage](#storage)
+    1. [DatabaseAccess](#databaseaccess)
+    2. [PersistenceAdapter](#persistenceadapter)
+    3. [Observable](#observable)
+  1. [EventProcessing](#eventprocessing)
+  1. [EventSubscriber](#eventsubscriber)
+  1. [API](#api)
+  1. [Notifications](#notifications)
  
 
-## The Argos Philosophy<a name="The-Argos-Architecture"></a>
+## The Argos Philosophy
 
 The ArgosBackend (**AB**) is a [Java 8](https://www.java.com/en/download/faq/java8.xml) application, which uses [Maven](https://maven.apache.org/) for project management.
 It is build to be as flexible as possible, allowing future egineers to extend the functionality. Thus, some critical design decisions will be depicted in the following chapters.
 
-## Architecture<a name="Architecture"></a>
+## Architecture
 
 ![ArgosBackend Architecture](/argos/resources/backend/argos-backend-architecture.png "ArgosBackend Architecture Overview")
 
 Shown above is the abstract architecture of the AB, as well as the EventProcessingPlatform (**EPP**) and the ArgosFrontend (**AF**). The latter two are not of our interest at this point, therefore they are only shown as black boxes.
 The AB consists of five main components.
 
-### Storage<a name="Storage"></a>
+### Storage
 
 The Storage component is the central point for everything, which must communicate with the database. Thus, there are a lot of methods to create, update, delete and fetch artifacts of all kinds from the database.
 
@@ -39,8 +39,7 @@ The Storage component is the central point for everything, which must communicat
 
 Shown above are the most relevant classes of the Storage component. You will notice, that the only non-abstract implementations are the DatabaseAccessImpl and the PersistenceAdapterImpl. These two take responsibility for any kind of data exchange with the database.
 
----
-__DatabaseAccessImpl__<a anem="DatabaseAccess"></a>
+#### DatabaseAccessImpl
 
 The DatabaseAccessImpl implements only a few generic methods, which are very flexible and can be adapted to fit almost every scenario.
 
@@ -68,8 +67,7 @@ For example:
 
 Since those methods have very complex signatures, they are not shown completely in the class diagram. Although these methods are too complex for the class diagram, we made sure to write JavaDocs - as shown in the example - for every method in the entire AB. Therefore, you should find some more help when inspecting the actual source code.
 
----
-__PersistenceAdapterImpl__<a name="PersistenceAdapter"></a>
+#### PersistenceAdapterImpl
 
 The PersistenceAdapterImpl is a singleton wrapper for the DatabaseAccessImpl. It provides a lot of methods for fetching artifacts from the database. Furthermore, it also inherits from the ObservableImpl. This will come into play later on.
 
@@ -121,8 +119,7 @@ This redundancy is given for all three main operations:
 
 The first option is always to just create/update/delete a chunk of artifacts. The latter will only affect one artifact. But - as you might have already read in the JavaDoc - the first method will not send any notifications to the AF while the second option will. Thus, it depends on the situation which option you have to use.
 
----
-__ObservableImpl__<a name="Observable"></a>
+#### ObservableImpl
 
 Speaking of the notifications: This is where the inherited behavior of the ObservableImpl becomes important. Since the PersistenceAdapterImpl is the central point of database communication, it is perfectly suited to trigger web socket notifications. In order to do so, the observer pattern is implemented. This will enable an extensible way of observing the database, which is used by the Notifications component already. 
 
@@ -176,10 +173,23 @@ When an artifact gets stored, the PersistenceAdapterImpl calls the inherited `no
 The Notifications component is also one of the observers. Therefore, it is able to generate a web socket notification, which contains the current change. You will find more information [here](#Notifications). 
 
 
-### EventProcessing<a name="EventProcessing"></a>
+### EventProcessing
 
-### EventSubscriber<a name="EventSubscriber"></a>
+The EventProcessing component consists of different classes. The most relevant ones are shown below:
 
-### API<a name="API"></a>
+![ArgosBackend EventProcessing Architecture](/argos/resources/backend/argos-backend-event-processing-architecture.png "ArgosBackend EventProcessing Architecture")
+
+The central class is the EventReceiverImpl. As you can see, it is a RestEndpoint. This is, because events will arrive as POST requests from the EPP. Therefore, the EventReceiverImpl offers a route for exactly these requests.<br>
+Additionally, the EventReceiverImpl has two different Observables.
+
+#### EventCreationObservable
+
+The EventCreationObservable accepts EventCreationObservers. These are interested in new events, which are received by the EventReceiverImpl. By default, one instance of the EventEntityMapperImpl is subscribed to the EventCreationObservable.
+
+As the name already suggests, this instance will try to map the received event to an entity in the database. This is done by using the EventEntityMapping - if there is one for the EventType.
+
+### EventSubscriber
+
+### API
 
 ### Notifications<a name="Notifications"></a>
