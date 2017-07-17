@@ -387,4 +387,16 @@ These methods are very easy to use - and to understand. Thus, there should be no
 
 ### API
 
-### Notifications<a name="Notifications"></a>
+![ArgosBackend API Architecture](/argos/resources/backend/argos-backend-api-architecture.png "ArgosBackend API Architecture")
+
+The API package is responsible for accepting and processing REST requests of the AF. <br>
+Shown above are the different RestEndpoints of the API package. Each RestEndpoint is responsible for a distinct set of artifacts. Therefore, each RestEndpoint has also its own base route.<br>
+The EntityEndpoint for example is accessable under ```/api/entity/...```.
+
+The full documentation for the API can be found [here](https://github.com/bptlab/argos-backend/wiki/Swagger-REST-Documentation) or directly in the Argos repository under ```argos-backend/docu```. An exported HTML version is available under ```argos-backend/src/main/resources/public/docu```.<br>
+The documentation is written using [Swagger](https://swagger.io/). You may also import the ```argos-backend/docu/swagger.yaml``` into the [Swagger Editor](http://editor.swagger.io/#/) to edit and preview the REST documentation.
+
+---
+####
+
+### Notifications
