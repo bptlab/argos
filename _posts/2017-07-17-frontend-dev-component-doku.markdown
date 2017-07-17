@@ -23,6 +23,12 @@ categories: argos frontend developer documentation
     1. [EntityMappingListItem](#entitymappinglistitem)
     1. [EventQueryListItem](#eventquerylistitem)
     1. [EventTypeCard](#eventtypecard)
+1. [Create views](#createviews)
+    1. [CreateEntityMappingView](#createentitymappingview)
+    1. [CreateEventQueryView](#createeventqueryview)
+        1. [EventQueryInputArea](#eventqueryinputarea)
+        1. [EventTypeInformation](#eventtypeinformation)
+    1. [CreateEventTypeView](#createeventtypeview)
 1. [Utils](#utils)
     1. [ChangeNotifier](#changenotifier)
     1. [ConfirmationMessage](#confirmationmessage)
@@ -137,6 +143,31 @@ Also, buttons for editing and deleting the query are rendered.
 ### EventTypeCard
 This component renders a collapsible overview of a given event type.
 It comprises of general event type information, like the name and the number of registered events, as well as tabs for showing the event type attributes, associated queries (using an `EventQueryListItem`) and registered mappings (using `EntityMappingListItem` elements) for this event type.
+
+---
+
+## Create views
+The following views can be reached from the `SettingsView` and allow to add and edit different objects in the system.
+
+### CreateEntityMappingView
+This component fetches available event types and entity types and allows to create and edit mappings between their attributes.
+After an event type or entity type is selected the corresponding event type attributes or respectively entity attributes are requested and then displayed in dropdowns.
+
+### CreateEventQueryView
+The `CreateEventQueryView` component allows to add and edit a new query.
+In case, a query should be edited, it is split at the "FROM" part, to ensure the user can not edit the "SELECT" part before, as this needs to be fixed and not changeable.
+The single functions in this component are documented within the code.
+
+#### EventQueryInputArea
+This component renders two `TextField` elements, one for the query description and another one for the query itself.
+In case a query should be edited, the "SELECT" part is added to the floating hint text.
+
+#### EventTypeInformation
+Using a list of event type attributes, this component renders a material ui `Card` with a list of these attributes.
+
+### CreateEventTypeView
+The `CreateEventTypeView` component renders a form for creating new event types.
+Next to two fixed input fields for the event type name and the time stamp attribute name, a dynamic list of input fields is rendered, so the user can provide any number of event type attributes.
 
 ---
 
