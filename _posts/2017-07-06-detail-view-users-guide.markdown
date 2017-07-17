@@ -5,7 +5,7 @@ date:   2017-07-11 14:15:00 +0200
 categories: jekyll update documentation
 ---
 
-The Detail-View is divided into 4 major components. Entity details, an events over time diagram, a filter bar and a table showing all events of a certain event type. This view shows details to a selected entity. Entities depend on data and can, for example, be products, product categories or parts.
+The Detail-View is divided into 4 major components. Entity details, an events-over-time-diagram, a filter bar and a table showing all events of a certain event type. This view shows details to a selected entity. Entities depend on data and can, for example, be products, product categories or parts.
 
 ## Structure
 
@@ -22,7 +22,7 @@ The Detail-View is divided into 4 major components. Entity details, an events ov
   Your browser does not support the video tag.
 </video><p></p>
 
-Entity details show a set of attributes and their values for the currently selected entity. This is a preselected set of attributes and does not display all attributes of an entity. If an important attribute is missing and should be displayed, please contact your solution engineer.
+Entity details show a set of attributes and their values for the currently selected entity. This is a preselected set of attributes and does not display all attributes of an entity. If an important attribute is missing and should be displayed, please contact your solution engineer. Her or she can edit the configuration on order to preselect other attributes.
 
 ## Events over Time Diagram
 
@@ -31,7 +31,7 @@ Entity details show a set of attributes and their values for the currently selec
   Your browser does not support the video tag.
 </video><p></p>
 
-The events over time diagram gives an overview of displayed events of a selected event type. It is altered by filters and will only display events currently shown in the event table. You can move the diagram by dragging and dropping it or zoom inside the diagram by selecting a certain area with the mouse. Furthermore, if you hover the diagram a toolbar will be displayed above, showing more options.
+The events-over-time-diagram gives an overview of displayed events of a selected event type. It is altered by filters and will only display events currently shown in the event table. You can move the diagram by dragging and dropping it or zoom inside the diagram by selecting a certain area with the mouse. Furthermore, if you hover the diagram, a toolbar will be displayed above, showing more options.
 
 ## Filter Bar
 
