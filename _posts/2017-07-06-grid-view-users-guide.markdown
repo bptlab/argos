@@ -49,4 +49,4 @@ The state distribution diagram shows the percentage entities having a certain st
   Your browser does not support the video tag.
 </video><p></p>
 
-The entity grid shows children of a parent entity, previously selected through the Grid-View and filtered by the search bar. Each entity is displayed as a card showing a selection of attributes and giving two navigation possibilities. `children` navigates deeper into the Grid-View by displaying child entities of the clicked entity. `inspect` navigates to the Detail-View, showing further details and specific events for an entity.
+The entity grid shows children of a parent entity, previously selected by the Grid-View and filtered by the search bar. Each entity is displayed as a card showing a configured selection of attributes and giving two navigation possibilities. `children` navigates deeper into the Grid-View by displaying child entities of the clicked entity. `inspect` navigates to the Detail-View, showing further details and specific events for an entity.
