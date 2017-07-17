@@ -17,7 +17,12 @@ categories: argos frontend developer documentation
     1. [EntityCard](#entitycard)
     1. [HierarchyStepper](#hierarchystepper)
     1. [StatusDiagram](#statusdiagram)
+1. [SettingsView](#settingsview)
+    1. [EntityMappingListItem](#entitymappinglistitem)
+    1. [EventQueryListItem](#eventquerylistitem)
+    1. [EventTypeCard](#eventtypecard)
 
+---
 
 ## Introduction to Argos components
 The Argos front end comprises of several [REACT](https://facebook.github.io/react/) components.
@@ -29,6 +34,8 @@ Components that need a data-connection to the back end are not plain REACT compo
 More information regarding this component and the used framework can be found in (TODO: ADD LINK).
 
 Hereinafter, the components will be briefly introduced and explained, following the project's file structure.
+
+---
 
 ## DetailView
 The `DetailView` component structures and builds the page showing details to any entity.
@@ -52,6 +59,7 @@ If the amount of events is to large, the `DetailView` will only pass chunks of e
 This component displays a tab for each passed event type and triggers a handler with the newly selected type in case the user selects a tab.
 The `EventTab` component is used within in the `DetailView` to let the user select the type of events that should be displayed for the current entity.
 
+---
 
 ## GridView
 The `GridView` fetches information about the current entity.
@@ -74,3 +82,22 @@ For rendering, the material ui classes `Stepper` and `StepLabel` are used.
 
 ### StatusDiagram
 Receiving entity objects, the `StatusDiagram` component extracts the status information from them and renders a stacked, horizontal bar chart, visualizing the distribution of the different statutes.
+
+---
+
+## SettingsView
+The `SettingsView` component renders a `SearchBar` along with `EventTypeCard` elements for each event type registered in the system.
+The list of shown event types can be constrained by input from the search bar.
+
+### EntityMappingListItem
+This component shows information to a given entity mapping and offers action buttons, takes a callback function for deleting this mapping and also needs event type information.
+It renders the concerned event type and entity name, together with all mapping conditions.
+In addition, buttons for editing and deleting the mapping are created.
+
+### EventQueryListItem
+Using a `ListItem`, this component shows the description and the value of a given query.
+Also, buttons for editing and deleting the query are rendered.
+
+### EventTypeCard
+This component renders a collapsible overview of a given event type.
+It comprises of general event type information, like the name and the number of registered events, as well as tabs for showing the event type attributes, associated queries (using an `EventQueryListItem`) and registered mappings (using `EntityMappingListItem` elements) for this event type.
