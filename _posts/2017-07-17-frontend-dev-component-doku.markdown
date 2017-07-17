@@ -21,6 +21,20 @@ categories: argos frontend developer documentation
     1. [EntityMappingListItem](#entitymappinglistitem)
     1. [EventQueryListItem](#eventquerylistitem)
     1. [EventTypeCard](#eventtypecard)
+1. [Utils](#utils)
+    1. [ChangeNotifier](#changenotifier)
+    1. [ConfirmationMessage](#confirmationmessage)
+    1. [ConnectionCache](#connectioncache)
+    1. [ConnectionComponent](#connectioncomponent)
+    1. [EntityInformation](#entityinformation)
+    1. [ErrorMessage](#errormessage)
+    1. [FilterBar](#filterbar)
+    1. [HelpButton](#helpbutton)
+    1. [LoadingAnimation](#loadinganimation)
+    1. [NotFound](#notfound)
+    1. [Notification](#notification)
+    1. [RestRoutesManager](#restroutesmanager)
+    1. [SearchBar](#searchbar)
 
 ---
 
@@ -105,3 +119,62 @@ Also, buttons for editing and deleting the query are rendered.
 ### EventTypeCard
 This component renders a collapsible overview of a given event type.
 It comprises of general event type information, like the name and the number of registered events, as well as tabs for showing the event type attributes, associated queries (using an `EventQueryListItem`) and registered mappings (using `EntityMappingListItem` elements) for this event type.
+
+---
+
+
+## Utils
+The `Utils` class is not a REACT component but provides several functions that are used throughout the project.
+All available functions are well documented within the code.
+
+### ChangeNotifier
+To be able to receive notifications from the back end in case information changed, the `ChangeNotifier` class allows other components to register for certain notifications and will invoke the callback provided during registration.
+
+### ConfirmationMessage
+This REACT component opens a material ui `Dialog` with an abort and confirm button.
+
+### ConnectionCache
+Working with the browser's _sessionStorage_, this component implements a basic cache, where received data is stored mapped to the requested url.
+It allows to retrieve this data by providing an url, as well as cache entries can be invalidated for each url or notification individually.
+
+### ConnectionComponent
+The `ConnectionComponent` inherits from the REACT `Component` and works as a wrapper for project specific refetch adjustments.
+It decides whether a request will be satisfied from mock data, from the cache or from a back end request.
+This component also takes care of caching successful requests and parsing JSON responses.
+
+### EntityInformation
+For a given entity object, the `EntityInformation` component renders a list with all attributes associated with this entity along with their corresponding values.
+
+### ErrorMessage
+A simple component to display a given string next to a warning sign in a visual container.
+
+### FilterBar
+The `FilterBar` component groups `SearchBar` elements and grows with the user's input, meaning that there always is an empty input field to allow any combinations of filters.
+It requires a callback where all set filters will be submitted everytime the input changes.
+Optionally, a source for autocompleting can be provided and whether the input fields allow the creation of filters by columns (if this is enabled, the user can type "columnname:search term" to create a filter only working on a specific "columnname", searching for the "search term").
+
+### HelpButton
+This component is used by the `Header` and displays an help icon.
+By clicking this icon, the help elements on the page will be toggled.
+Help elements can be added using the [introJS](http://introjs.com/) framework.
+
+### LoadingAnimation
+`LoadingAnimation` acts as a wrapper for the material ui's `CircularProgress`, visualizing an indefinitely loading process.
+This component is for example used to bridge the loading time for back end requests.
+
+### NotFound
+Renders an `ErrorMessage` with a _404_ error message.
+
+### Notification
+This component shows success or error notifications at the bottom of the page, containing a fitting icon and a given notification message.
+
+### RestRoutesManager
+This map contains regex expressions matching the api routes.
+It defines the functions that should be called when working with mock data and also contains a boolean value whether this route should be cached or not.
+
+### SearchBar
+The `SearchBar` component renders an input field, that can use a given autocomplete source accompanied by a button for clearing the user input.
+In case the _useColumns_ option is set, the user can limit the current search/filter to a specific attribute or column, by dividing the column name from the search term with an ":".
+The component will visualize this separation by showing the column name as a floating text above the search term.
+Every time the input changes, the components invokes the given callback with its id, the search term and optionally the column name the user specified.
+The usage and most important functionalities are also documented within the class.
