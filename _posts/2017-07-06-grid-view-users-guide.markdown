@@ -18,7 +18,7 @@ The Grid-View is divided into 4 major components. An entity hierarchy, a search 
 ## Entity Type Hierarchy
 
 <video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
-  <source src="/argos/resources/grid-view-hierarchy.webm" type="video/webm">
+  <source src="/argos/resources/user/grid-view/hierarchy.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
 
@@ -27,7 +27,7 @@ The entity type hierarchy shows the hierarchy of already chosen entities and the
 ## Search Bar
 
 <video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
-  <source src="/argos/resources/grid-view-search-bar.webm" type="video/webm">
+  <source src="/argos/resources/user/grid-view/search-bar.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
 
@@ -36,7 +36,7 @@ The search bar filters the entity grid displayed below. It is possible to search
 ## State Distribution Diagram
 
 <video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
-  <source src="/argos/resources/grid-view-state-distribution-diagram.webm" type="video/webm">
+  <source src="/argos/resources/user/grid-view/state-distribution-diagram.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
 
@@ -45,7 +45,7 @@ The state distribution diagram shows the percentage entities having a certain st
 ## Entity Grid
 
 <video style="width: 100%; height: auto; box-shadow: 0px 0px 5px #888888;" autoplay loop>
-  <source src="/argos/resources/grid-view-entity-grid.webm" type="video/webm">
+  <source src="/argos/resources/user/grid-view/entity-grid.webm" type="video/webm">
   Your browser does not support the video tag.
 </video><p></p>
 
