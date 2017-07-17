@@ -20,7 +20,7 @@ categories: argos backend developer documentation
     1. [EventSubscriber](#eventsubscriber)
     1. [API](#api)
     1. [Notifications](#notifications)
- 
+
 
 ## The Argos Philosophy
 
@@ -49,13 +49,13 @@ The DatabaseAccessImpl implements only a few generic methods, which are very fle
 For example:
 ```java
 /**
-  * This method executes a query in a certain transaction context while a session is 
+  * This method executes a query in a certain transaction context while a session is
   * open and returns the result or a default value.
   * @param session - the database session, which must be open
   * @param query - the query to execute and to retrieve the results from
   * @param transaction - the current transaction
   * @param getValue - the function to get the results from the query
-  * @param defaultValue - a fall back default value in case anything went wrong or no 
+  * @param defaultValue - a fall back default value in case anything went wrong or no
   * entities were found
   * @param <ResultType> - the result type
   * @param <QueryType> - the query type
@@ -82,7 +82,7 @@ Methods offered by the PersistenceAdapterImpl generally look like this:
   * @return - the eventQuery with matching id
   */
 EventQuery getEventQuery(long eventQueryId);
-     
+
 /**
   * This method returns a list of events, which belong to a specific eventType.
   * @param eventTypeId - the unique identifier of the eventType
@@ -97,18 +97,18 @@ Additionally, since the PersistenceAdapterImpl is implemented using the singleto
 Besides data fetching, the PersistenceAdapterImpl also offeres method for manipulating artifacts in the database. You get to chose between two different methods:
 ```java
 /**
-  * This method saves/updates a list of persistenceArtifacts. Connected web socket 
+  * This method saves/updates a list of persistenceArtifacts. Connected web socket
   * clients will *not* be notified.
   * @param artifacts - the artifacts to save/update
   * @return - true, if all artifacts were saved/updated
   */
 boolean saveArtifacts(PersistenceArtifact... artifacts);
-    
+
 /**
-  * This method saves a new artifact in the database and notifies connected web socket 
+  * This method saves a new artifact in the database and notifies connected web socket
   * clients.
   * @param artifact - the artifact to save
-  * @param fetchUri - the uri, where connected web socket clients can fetch the new 
+  * @param fetchUri - the uri, where connected web socket clients can fetch the new
   * artifact from
   * @return - true, if the artifact was stored in the database
   */
@@ -124,7 +124,7 @@ The first option is always to just create/update/delete a chunk of artifacts. Th
 
 #### ObservableImpl
 
-Speaking of the notifications: This is where the inherited behavior of the ObservableImpl becomes important. Since the PersistenceAdapterImpl is the central point of database communication, it is perfectly suited to trigger web socket notifications. In order to do so, the observer pattern is implemented. This will enable an extensible way of observing the database, which is used by the Notifications component already. 
+Speaking of the notifications: This is where the inherited behavior of the ObservableImpl becomes important. Since the PersistenceAdapterImpl is the central point of database communication, it is perfectly suited to trigger web socket notifications. In order to do so, the observer pattern is implemented. This will enable an extensible way of observing the database, which is used by the Notifications component already.
 
 The implementation of this notification trigger will look like this:
 
@@ -140,15 +140,15 @@ public interface Observable<Observer> {
 	 * @param notifyMethod - the method to invoke for each observer
 	 */
 	void notifyObservers(Consumer<Observer> notifyMethod);
-    
+
     ...
 }
 
 /**
  * This class offers methods to retrieve and store artifacts.
  */
-public final class PersistenceAdapterImpl 
-              extends ObservableImpl<PersistenceArtifactUpdateObserver> 
+public final class PersistenceAdapterImpl
+              extends ObservableImpl<PersistenceArtifactUpdateObserver>
               implements PersistenceAdapter {
 
     /**
@@ -161,7 +161,7 @@ public final class PersistenceAdapterImpl
         }
 
         notifyObservers((PersistenceArtifactUpdateObserver observer) ->
-        observer.onArtifactUpdated(PersistenceArtifactUpdateType.CREATE, 
+        observer.onArtifactUpdated(PersistenceArtifactUpdateType.CREATE,
         artifact, fetchUri));
 
         return true;
@@ -171,9 +171,9 @@ public final class PersistenceAdapterImpl
 }
 ```
 
-When an artifact gets stored, the PersistenceAdapterImpl calls the inherited `notifyObservers` method passing a lambda expression as parameter. This expression will then be executed for each of the registered observers. Thus, every observer will be notified about the data changes. 
+When an artifact gets stored, the PersistenceAdapterImpl calls the inherited `notifyObservers` method passing a lambda expression as parameter. This expression will then be executed for each of the registered observers. Thus, every observer will be notified about the data changes.
 
-The Notifications component is also one of the observers. Therefore, it is able to generate a web socket notification, which contains the current change. You will find more information [here](#Notifications). 
+The Notifications component is also one of the observers. Therefore, it is able to generate a web socket notification, which contains the current change. You will find more information [here](#Notifications).
 
 
 ### EventProcessing
@@ -187,7 +187,7 @@ Additionally, the EventReceiverImpl has two different Observables.
 
 #### EventCreationObservable
 
-The EventCreationObservable accepts EventCreationObservers. These are interested in new events, which are received by the EventReceiverImpl. 
+The EventCreationObservable accepts EventCreationObservers. These are interested in new events, which are received by the EventReceiverImpl.
 
 ---
 __Default behavior__:
@@ -212,15 +212,15 @@ Your code could look something like that:
   */
 public static void main(String[] args) {
 	...
-    
+
     Argos argos = ArgosImpl.run();
     try {
         argos.addEventEntityMapper(new EventCreationObserver() {
             @Override
-            public void onEventCreated(EventEntityMappingStatus mappingStatus, 
-                                        EventType eventType, 
-                                        List<TypeAttribute> eventTypeAttributes, 
-                                        Event event, 
+            public void onEventCreated(EventEntityMappingStatus mappingStatus,
+                                        EventType eventType,
+                                        List<TypeAttribute> eventTypeAttributes,
+                                        Event event,
                                         List<Attribute> eventAttributes) {
 
                 // do not continue, if the event was mapped already
@@ -297,7 +297,7 @@ public static void main(String[] args) {
 
                 // how many of these events were already received?
                 int numberOfEvents = PersistenceAdapterImpl.getInstance().
-                                      getEventCountOfEntity(eventOwner.getId(), 
+                                      getEventCountOfEntity(eventOwner.getId(),
                                       	event.getTypeId());
 
                 // is the amount of events critical already?
@@ -358,6 +358,32 @@ Otherwise, the EventMappingObservers are notified to update the status of the ev
 If everyhing went well up until this point, we want to make sure the event is stored in the database. This will automatically trigger a web socket notification for connected AFs.
 
 ### EventSubscriber
+
+![ArgosBackend EventSubscriber Architecture](/argos/resources/backend/argos-backend-event-subscriber-architecture.png "ArgosBackend EventSubscriber Architecture")
+
+The EventSubscriber is an abstraction of the EEP. Therefore, it offers a wide spectrum for event-type and -query creation and modification. Changes made to the event-types and -queries are usually triggered by the AF via [REST API](#api).<br>
+Internally, all the EventSubscriber does is to create HTTP requests. These requests are send to the real EEP. The response is processed and forwarded to the initial AF client. A successful request will lead to an update of the database.
+
+While the EventPlatformFeedback(-Impl) is just a data class for forwarding responses to the initial client, the main work is done by the EventPlatformUpdaterImpl. This clas offeres the mentioned methods. Since there is only one EEP for the entire system it is implemented using the singleton design pattern. This will also allow every class in the system to use the EEP for any event-type and -query manipulation.
+
+Methods offered by the EventPlatformUpdaterImpl generally look like this:
+```java
+/**
+ * This method registers a given eventType in the eventProcessingPlatform.
+ * @param eventType - the eventType, which should be registered
+ * @return - the feedback of the eventProcessingPlatform
+ */
+EventPlatformFeedback registerEventType(EventType eventType);
+
+/**
+ * This method deletes a given eventType in the eventProcessingPlatform.
+ * @param eventType - the eventType to be deleted
+ * @return - the feedback of the eventProcessingPlatform
+ */
+EventPlatformFeedback deleteEventType(EventType eventType);
+```
+
+These methods are very easy to use - and to understand. Thus, there should be no explanation needed.
 
 ### API
 
