@@ -5,7 +5,7 @@ date:   2017-07-06 14:15:00 +0200
 categories: jekyll update documentation
 ---
 
-The Settings-View can be entered over the gear wheel icon in the top right corner of the Grid-View or the Detail-View. It shows event types, their attributes, queries for each event type and the corresponding event-entity-mappings.
+The Settings-View can be entered via the gear wheel icon in the top right corner of the Grid-View or the Detail-View. It shows event types, their attributes, queries for each event type and the corresponding event-entity-mappings.
 
 ## Structure
 
