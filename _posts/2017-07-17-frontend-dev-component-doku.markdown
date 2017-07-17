@@ -24,6 +24,7 @@ categories: argos frontend developer documentation
 
 ---
 
+
 ## Introduction to Argos components
 The Argos front end comprises of several [REACT](https://facebook.github.io/react/) components.
 In the [argos front end project](https://github.com/bptlab/argos-frontend), most components are structured corresponding the views they are used in:
@@ -36,6 +37,7 @@ More information regarding this component and the used framework can be found in
 Hereinafter, the components will be briefly introduced and explained, following the project's file structure.
 
 ---
+
 
 ## DetailView
 The `DetailView` component structures and builds the page showing details to any entity.
@@ -61,6 +63,7 @@ The `EventTab` component is used within in the `DetailView` to let the user sele
 
 ---
 
+
 ## GridView
 The `GridView` fetches information about the current entity.
 Next to a `SearchBar`, whose filter value is passed to all `CardGrid` elements rendered for each type of available child entities, it shows the `HierarchyStepper`.
@@ -84,6 +87,7 @@ For rendering, the material ui classes `Stepper` and `StepLabel` are used.
 Receiving entity objects, the `StatusDiagram` component extracts the status information from them and renders a stacked, horizontal bar chart, visualizing the distribution of the different statutes.
 
 ---
+
 
 ## SettingsView
 The `SettingsView` component renders a `SearchBar` along with `EventTypeCard` elements for each event type registered in the system.
