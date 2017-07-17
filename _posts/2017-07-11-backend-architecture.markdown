@@ -19,7 +19,14 @@ categories: argos backend developer documentation
         1. [Event Creation](#event-creation)
     1. [EventSubscriber](#eventsubscriber)
     1. [API](#api)
+        1. [RestEndpointUtil](#restendpointutilimpl)
     1. [Notifications](#notifications)
+        1. [Batching](#notification-batching)
+1. [Data Import](#data-import)
+    1. [Static Data Files](#static-data-files)
+        1. [Event Types](#event-types)
+        1. [Product Data](#product-data)
+    1. [Configuration](#configuration)
 
 
 ## The Argos Philosophy
@@ -420,6 +427,9 @@ This method should always be used when processing REST requests, since it will h
 
 The existing RestEndpoints use the RestEndpointUtilImpl during their setup. The code looks like this:
 ```java
+/**
+ * This interface represents the endpoint to receive entities.
+ */
 public class EntityEndpointImpl implements EntityEndpoint {
     ...
 
@@ -442,3 +452,108 @@ The ```Spark.get``` method taken an URI (in this case ```"/api/entity/{entityId}
 The Route will be called by the Spark framework, whenever the according request is received. Afterwards, the request as well as the response are given to the Route. The Route is then able to manipulate the response (set the response code, set the response text, etc.) and read parameters as well as the body from the request.
 
 ### Notifications
+
+![ArgosBackend Notifications Architecture](/argos/resources/backend/argos-backend-notifications-architecture.png "ArgosBackend Notifications Architecture")
+
+The Notifications component is divided in the ClientUpdateService(-Impl) and the PushNotificationClientHandler(-Impl). While the PushNotificationClientHandlerImpl is responsible to accept incoming AF web socket clients, the ClientUpdateServiceImpl takes care of creating web socket notifications.<br>
+These notifications are triggered by the [PersistenceAdapterImpl](#observableimpl).
+
+The web socket notifications are just some objects, which get serialized using JSON. There are two different kinds of notifications.
+
+* Basic Notification
+
+These notifications look like this:
+```json
+{
+    "UpdateReason":"CREATE",
+    "ArtifactType":"Event",
+    "ArtifactId":13,
+    "FetchUri":"/api/entity/13"
+}
+```
+
+* Event Creation Notification
+
+Those notifications are based on the BasicNotifications shown above. Additionally, they contain information about the EventOwner and the EventType. These information are required in the AF for more efficient processing.<br>
+EventCreationNotifications look like this:
+```json
+{
+    "UpdateReason":"CREATE",
+    "ArtifactType":"Event",
+    "ArtifactId":92,
+    "FetchUri":"/api/entity/13/eventtype/37/events/false/0/1",
+    "EventTypeId":37,
+    "EntityId":13
+}
+```
+
+The shown example will inform all connected AF clients about the arrival of a new event. This event belongs to the Entity with id 13.<br>
+This information is used to decide whether to display the new event or not.
+
+---
+#### Notification Batching
+
+There are currently two supported batching modes for the web socket notifications.
+
+* Send Immediately
+
+This mode will send every single notification as soon as it is created. <br>
+This mode is made for maximal speed. Notifications are send and received as soon as possible. This enables the domain experts to analyze events in near real time.
+
+**IMPORTANT**: This will affect the overall performance of the AB. Since every notification is send individually, there might be a lot of traffic for the web socket connection. Additionally, since the web socket notifications will **not** send all the changed data, the REST API will also have more traffic. Please keep this in mind.
+
+* Batch Notifications
+
+This mode introduces a buffer for the notifications. This buffer will be emptied every few seconds - you can configure the exact amount of time. Additionally, every updated Artifact will only receive one update within the interval. This means, that earlier updates on the same Artifact will be overwritten, as soon as a new update is introduced. This method is still sufficient, since the data are not send over the web socket connection. Thus, the client has to fetch all data from the REST API no matter what. Therefore, it is enough to inform the client about just one change since all the data are fetched completely anyways.
+
+## Data Import
+
+![ArgosBackend FileParsing Architecture](/argos/resources/backend/argos-backend-file-parsing-architecture.png "ArgosBackend FileParsing Architecture")
+
+Now that we have seen the overall communication architecture of the AB, we want to dive into another important topic: The file import.<br>
+In general, we distinguish between two different types of files.
+
+### Static Data Files
+
+Static data files are those, which are specific for the implemented use case. These files have to be created by the solution engineer. They contain the basis for any further operations.<br>
+Once again, we differentiate between two different types.
+
+---
+#### Event Types
+
+The base for all event processing are some basic event-types. These event-types must be deployed in the AB. The default location is under ```argos-backend/src/main/resources/event_types```. Event-types are basically JSON files, which should look like [this](https://github.com/bptlab/argos-backend/wiki/Default-EventType-File-Schema). Besides all of the event-type's attributes, you may define a list of queries for the event-type.
+
+**IMPORTANT**: You can only define **one** event-type per file. This means, that you will need one file for each basic event-type you want to deploy.
+
+![ArgosBackend EventTypeParser Architecture](/argos/resources/backend/argos-backend-event-type-parser-architecture.png "ArgosBackend EventTypeParser Architecture")
+
+The architecture of the EventTypeParser is as simple as effective. It only needs to read all files in the configured directory and parse them. Since the event-types are saved as JSON objects the GSON library is used to convert them into plain Java objects.<br>
+The parsing is started by the ArgosImpl:
+```java
+/**
+ * This class represents the argos backend application.
+ */
+public class ArgosImpl implements Argos {
+    ...
+
+    /**
+	 * This method starts the argos backend.
+	 */
+    public void start() {
+        // read all event-type
+        EventTypeParserImpl.getInstance().loadEventTypes();
+
+        ...
+
+        // register all event-types and -queries at the EEP
+        EventProcessingPlatformUpdaterImpl.getInstance().setup(this);
+    }
+}
+```
+
+The displayed code snippet shows, how the AB starts. It depicts how the parsing process for the event-types is started. Afterwards, the EEP is notified about all event-types and their associated queries. Thus, the AB and the EEP will be synchronized after the start method is finished.
+
+---
+#### Product Data
+
+### Configuration
