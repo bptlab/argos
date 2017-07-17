@@ -397,6 +397,48 @@ The full documentation for the API can be found [here](https://github.com/bptlab
 The documentation is written using [Swagger](https://swagger.io/). You may also import the ```argos-backend/docu/swagger.yaml``` into the [Swagger Editor](http://editor.swagger.io/#/) to edit and preview the REST documentation.
 
 ---
-####
+#### RestEndpointUtilImpl
+
+![ArgosBackend RestEndpointUtil Architecture](/argos/resources/backend/argos-backend-rest-endpoint-util-architecture.png "ArgosBackend RestEndpointUtil Architecture")
+
+Shown above is a utility class, which combines methods for all kinds of RestEndpoints. Besides very convenient function - like validating certain input types - it offers the ```executeRequest``` method.<br>
+The whole signature is shown below:
+```java
+/**
+ * This method executes a route and catching all exceptions for easier logging.
+ * @param logger - the logger to use
+ * @param request - the spark request
+ * @param response - the spark response
+ * @param route - the route to execute
+ * @return - the response to the request
+ */
+String executeRequest(Logger logger, Request request, Response response, Route route);
+```
+
+This method will execute a given Route (which is a function taking a ```Spark.Request``` and a ```Spark.Response``` as parameters). The required Request and Response are also given into this method and internally forwarded to the called Route. Additionally, the method takes a ```slf4j.Logger``` which is used for logging during the execution (this is, so the logger output will actually show the calling class instead of the RestEndpointUtilImpl). <br>
+This method should always be used when processing REST requests, since it will handle exceptions and thus, prevent the backend from unexpected behavior.
+
+The existing RestEndpoints use the RestEndpointUtilImpl during their setup. The code looks like this:
+```java
+public class EntityEndpointImpl implements EntityEndpoint {
+    ...
+
+    /**
+    * This method sets up the rest endpoint.
+    * @param sparkService - the spark service to register routes to
+    */
+    void setup(Service sparkService) {
+        sparkService.get(EntityEndpoint.getEntityBaseUri(),
+				(Request request, Response response) ->
+						endpointUtil.executeRequest(logger, request, response, this::getEntity));
+
+        ...
+    }
+}
+```
+
+The shown ```setup``` method shows the process of creating a REST GET route.<br>
+The ```Spark.get``` method taken an URI (in this case ```"/api/entity/{entityId}"``` - ```{entityId}``` is a parameter for the route) and such a function as mentioned earlier (Route). The route in our case is just another lambda function using the RestEndpointUtilImpl instance.<br>
+The Route will be called by the Spark framework, whenever the according request is received. Afterwards, the request as well as the response are given to the Route. The Route is then able to manipulate the response (set the response code, set the response text, etc.) and read parameters as well as the body from the request.
 
 ### Notifications
