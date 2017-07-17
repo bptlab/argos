@@ -56,18 +56,18 @@ The DatabaseAccessImpl implements only a few generic methods, which are very fle
 For example:
 ```java
 /**
-  * This method executes a query in a certain transaction context while a session is
-  * open and returns the result or a default value.
-  * @param session - the database session, which must be open
-  * @param query - the query to execute and to retrieve the results from
-  * @param transaction - the current transaction
-  * @param getValue - the function to get the results from the query
-  * @param defaultValue - a fall back default value in case anything went wrong or no
-  * entities were found
-  * @param <ResultType> - the result type
-  * @param <QueryType> - the query type
-  * @return - an object of the result value type
-  */
+ * This method executes a query in a certain transaction context while a session is
+ * open and returns the result or a default value.
+ * @param session - the database session, which must be open
+ * @param query - the query to execute and to retrieve the results from
+ * @param transaction - the current transaction
+ * @param getValue - the function to get the results from the query
+ * @param defaultValue - a fall back default value in case anything went wrong or no
+ * entities were found
+ * @param <ResultType> - the result type
+ * @param <QueryType> - the query type
+ * @return - an object of the result value type
+ */
 <ResultType, QueryType> ResultType getArtifacts(Session session,
                                                 Query<QueryType> query,
                                                 Transaction transaction,
@@ -84,17 +84,17 @@ The PersistenceAdapterImpl is a singleton wrapper for the DatabaseAccessImpl. It
 Methods offered by the PersistenceAdapterImpl generally look like this:
 ```java
 /**
-  * This method returns a eventQuery with given id.
-  * @param eventQueryId - the unique identifier of the eventQuery
-  * @return - the eventQuery with matching id
-  */
+ * This method returns a eventQuery with given id.
+ * @param eventQueryId - the unique identifier of the eventQuery
+ * @return - the eventQuery with matching id
+ */
 EventQuery getEventQuery(long eventQueryId);
 
 /**
-  * This method returns a list of events, which belong to a specific eventType.
-  * @param eventTypeId - the unique identifier of the eventType
-  * @return - a list of events, which belong to a specific eventType
-  */
+ * This method returns a list of events, which belong to a specific eventType.
+ * @param eventTypeId - the unique identifier of the eventType
+ * @return - a list of events, which belong to a specific eventType
+ */
 List<Event> getEventsOfEventType(long eventTypeId);
 ```
 
@@ -104,21 +104,21 @@ Additionally, since the PersistenceAdapterImpl is implemented using the singleto
 Besides data fetching, the PersistenceAdapterImpl also offeres method for manipulating artifacts in the database. You get to chose between two different methods:
 ```java
 /**
-  * This method saves/updates a list of persistenceArtifacts. Connected web socket
-  * clients will *not* be notified.
-  * @param artifacts - the artifacts to save/update
-  * @return - true, if all artifacts were saved/updated
-  */
+ * This method saves/updates a list of persistenceArtifacts. Connected web socket
+ * clients will *not* be notified.
+ * @param artifacts - the artifacts to save/update
+ * @return - true, if all artifacts were saved/updated
+ */
 boolean saveArtifacts(PersistenceArtifact... artifacts);
 
 /**
-  * This method saves a new artifact in the database and notifies connected web socket
-  * clients.
-  * @param artifact - the artifact to save
-  * @param fetchUri - the uri, where connected web socket clients can fetch the new
-  * artifact from
-  * @return - true, if the artifact was stored in the database
-  */
+ * This method saves a new artifact in the database and notifies connected web socket
+ * clients.
+ * @param artifact - the artifact to save
+ * @param fetchUri - the uri, where connected web socket clients can fetch the new
+ * artifact from
+ * @return - true, if the artifact was stored in the database
+ */
 boolean createArtifact(PersistenceArtifact artifact, String fetchUri);
 ```
 
@@ -159,8 +159,8 @@ public final class PersistenceAdapterImpl
               implements PersistenceAdapter {
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
     @Override
     public boolean createArtifact(PersistenceArtifact artifact, String fetchUri) {
         if (!saveArtifacts(artifact)) {
@@ -214,9 +214,9 @@ For an example, lets say, that we want to map every event to a special entity.<b
 Your code could look something like that:
 ```java
 /**
-  * Application start method.
-  * @param args - command line arguments
-  */
+ * Application start method.
+ * @param args - command line arguments
+ */
 public static void main(String[] args) {
 	...
 
@@ -281,9 +281,9 @@ Following the example for the EventCreationObservable, you can again control the
 Your code could look like this:
 ```java
 /**
-  * Application start method.
-  * @param args - command line arguments
-  */
+ * Application start method.
+ * @param args - command line arguments
+ */
 public static void main(String[] args) {
     ...
 
@@ -334,10 +334,10 @@ When we made the decision to implement this kind of observer pattern we hoped to
 Now, that we have seen two points for future extensions, we want to take a look at the overall process of event creation. The event creation is also part of the EventReceiverImpl and looks like this:
 ```java
 /**
-  * This method creates a new event from a given request body.
-  * @param requestBody - the request body to parse
-  * @param eventType - the eventType of the new event
-  */
+ * This method creates a new event from a given request body.
+ * @param requestBody - the request body to parse
+ * @param eventType - the eventType of the new event
+ */
 private void createEvent(String requestBody, EventType eventType);
 ```
 
@@ -434,9 +434,9 @@ public class EntityEndpointImpl implements EntityEndpoint {
     ...
 
     /**
-    * This method sets up the rest endpoint.
-    * @param sparkService - the spark service to register routes to
-    */
+     * This method sets up the rest endpoint.
+     * @param sparkService - the spark service to register routes to
+     */
     void setup(Service sparkService) {
         sparkService.get(EntityEndpoint.getEntityBaseUri(),
 				(Request request, Response response) ->
@@ -537,8 +537,8 @@ public class ArgosImpl implements Argos {
     ...
 
     /**
-	 * This method starts the argos backend.
-	 */
+     * This method starts the argos backend.
+     */
     public void start() {
         // read all event-type
         EventTypeParserImpl.getInstance().loadEventTypes();
