@@ -23,7 +23,7 @@ categories: argos frontend developer documentation
     1. [EntityMappingListItem](#entitymappinglistitem)
     1. [EventQueryListItem](#eventquerylistitem)
     1. [EventTypeCard](#eventtypecard)
-1. [Create views](#createviews)
+1. [Create views](#create-views)
     1. [CreateEntityMappingView](#createentitymappingview)
     1. [CreateEventQueryView](#createeventqueryview)
         1. [EventQueryInputArea](#eventqueryinputarea)
@@ -47,6 +47,20 @@ categories: argos frontend developer documentation
 ---
 
 
+## Introduction to Argos components
+The Argos front end comprises of several [REACT](https://facebook.github.io/react/) components.
+In the [argos front end project](https://github.com/bptlab/argos-frontend), most components are structured corresponding the views they are used in:
+For example, the [`HierarchyStepper`](#hierarchystepper) can be found in the [`GridView`](#gridview)-folder, as it is only used by this view.
+More common components, that are reused within the project, like buttons or notification, are located in the [`Utils`](#utils)-folder.
+
+Components that need a data-connection to the back end are not plain REACT components but inherit from the [`ConnectionComponent`](#connectioncomponent), to simplify the process of fetching data.
+More information regarding this component and the used framework can be found in (TODO: ADD LINK).
+
+Hereinafter, the components will be briefly introduced and explained, following the project's file structure.
+
+---
+
+
 ## App
 The `App` component fetches the entity type hierachy from the back end and saves it globally into the _window_ variable _hierarchy_.
 It also wraps the theme provider from material ui around the front end's pages.
@@ -59,20 +73,6 @@ This component defines a REACT `Router` with all available routes and the compon
 To allow a simple navigation throughout the front end, the `Header` component provides buttons, like a back button, help and settings button, as well as a headline for the page itself, depending on the current view.
 Here, the logic for navigating in the browser's history is located as well.
 The `Header` component is embedded by the different views and takes a page title and optionally a status of an entity that can be visualized.
-
----
-
-
-## Introduction to Argos components
-The Argos front end comprises of several [REACT](https://facebook.github.io/react/) components.
-In the [argos front end project](https://github.com/bptlab/argos-frontend), most components are structured corresponding the views they are used in:
-For example, the `HierarchyStepper` can be found in the `GridView`-folder, as it is only used by this view.
-More common components, that are reused within the project, like buttons or notification, are located in the `Utils`-folder.
-
-Components that need a data-connection to the back end are not plain REACT components but inherit from the `ConnectionComponent`, to simplify the process of fetching data.
-More information regarding this component and the used framework can be found in (TODO: ADD LINK).
-
-Hereinafter, the components will be briefly introduced and explained, following the project's file structure.
 
 ---
 
@@ -92,29 +92,29 @@ While rendering, the graph is colored corresponding the entity's status.
 ### EventTable
 The `EventTable` shows the events for the selected event type and entity.
 It has no logic for processing or filtering events and simply displays all passed event data combined with the given information about the event type.
-All filtering logic is performed in the `DetailView`.
-If the amount of events is to large, the `DetailView` will only pass chunks of event data to this table component and fetch more data as soon as the user scrolls to the page end.
+All filtering logic is performed in the [`DetailView`](#detailview).
+If the amount of events is to large, the [`DetailView`](#detailview) will only pass chunks of event data to this table component and fetch more data as soon as the user scrolls to the page end.
 
 ### EventTabs
 This component displays a tab for each passed event type and triggers a handler with the newly selected type in case the user selects a tab.
-The `EventTab` component is used within in the `DetailView` to let the user select the type of events that should be displayed for the current entity.
+The `EventTabs` component is used within in the [`DetailView`](#detailview) to let the user select the type of events that should be displayed for the current entity.
 
 ---
 
 
 ## GridView
 The `GridView` fetches information about the current entity.
-Next to a `SearchBar`, whose filter value is passed to all `CardGrid` elements rendered for each type of available child entities, it shows the `HierarchyStepper`.
+Next to a [`SearchBar`](#searchbar), whose filter value is passed to all `CardGrid` elements rendered for each type of available child entities, it shows the [`HierarchyStepper`](#hierarchystepper).
 
 ### CardGrid
 A `CardGrid` element receives a parent entity and an entity type.
-It then renders an `EntityCard` for each entity of the correct entity type and being a child of the given parent entity, after fetching the corresponding information.
+It then renders an [`EntityCard`](#entitycard) for each entity of the correct entity type and being a child of the given parent entity, after fetching the corresponding information.
 Single entities might be hidden in case a filter is applied and does not match this entity.
-To provide a quick overview how the statusus are distributed within the entity type, a `StatusDiagram` is shown.
+To provide a quick overview how the statusus are distributed within the entity type, a [`StatusDiagram`](#statusdiagram) is shown.
 
 ### EntityCard
 The `EntityCard` component needs an entity object as a parameter, as well as the id of the parent entity.
-It renders information concerning the entity utilizing the `Utils/EntityInformation` component.
+It renders information concerning the entity utilizing the `[Utils](#utils)/[EntityInformation](#entityinformation)` component.
 Also links for browsing all children of the given entity or inspecting the events for this entity are build and displayed.
 
 ### HierarchyStepper
@@ -128,7 +128,7 @@ Receiving entity objects, the `StatusDiagram` component extracts the status info
 
 
 ## SettingsView
-The `SettingsView` component renders a `SearchBar` along with `EventTypeCard` elements for each event type registered in the system.
+The `SettingsView` component renders a [`SearchBar`](#searchbar) along with [`EventTypeCard`](#eventtypecard) elements for each event type registered in the system.
 The list of shown event types can be constrained by input from the search bar.
 
 ### EntityMappingListItem
@@ -142,19 +142,19 @@ Also, buttons for editing and deleting the query are rendered.
 
 ### EventTypeCard
 This component renders a collapsible overview of a given event type.
-It comprises of general event type information, like the name and the number of registered events, as well as tabs for showing the event type attributes, associated queries (using an `EventQueryListItem`) and registered mappings (using `EntityMappingListItem` elements) for this event type.
+It comprises of general event type information, like the name and the number of registered events, as well as tabs for showing the event type attributes, associated queries (using an [`EventQueryListItem`](#eventquerylistitem)) and registered mappings (using [`EntityMappingListItem`](#entitymappinglistitem) elements) for this event type.
 
 ---
 
 ## Create views
-The following views can be reached from the `SettingsView` and allow to add and edit different objects in the system.
+The following views can be reached from the [`SettingsView`](#settingsview) and allow to add and edit different objects in the system.
 
 ### CreateEntityMappingView
 This component fetches available event types and entity types and allows to create and edit mappings between their attributes.
 After an event type or entity type is selected the corresponding event type attributes or respectively entity attributes are requested and then displayed in dropdowns.
 
 ### CreateEventQueryView
-The `CreateEventQueryView` component allows to add and edit a new query.
+The `CreateEventQueryView` component allows to add and edit a new query, using the [`EventQueryInputArea`](#eventqueryinputarea).
 In case, a query should be edited, it is split at the "FROM" part, to ensure the user can not edit the "SELECT" part before, as this needs to be fixed and not changeable.
 The single functions in this component are documented within the code.
 
@@ -198,7 +198,7 @@ For a given entity object, the `EntityInformation` component renders a list with
 A simple component to display a given string next to a warning sign in a visual container.
 
 ### FilterBar
-The `FilterBar` component groups `SearchBar` elements and grows with the user's input, meaning that there always is an empty input field to allow any combinations of filters.
+The `FilterBar` component groups [`SearchBar`](#searchbar) elements and grows with the user's input, meaning that there always is an empty input field to allow any combinations of filters.
 It requires a callback where all set filters will be submitted everytime the input changes.
 Optionally, a source for autocompleting can be provided and whether the input fields allow the creation of filters by columns (if this is enabled, the user can type "columnname:search term" to create a filter only working on a specific "columnname", searching for the "search term").
 
@@ -212,7 +212,7 @@ Help elements can be added using the [introJS](http://introjs.com/) framework.
 This component is for example used to bridge the loading time for back end requests.
 
 ### NotFound
-Renders an `ErrorMessage` with a _404_ error message.
+Renders an [`ErrorMessage`](#errormessage) with a _404_ error message.
 
 ### Notification
 This component shows success or error notifications at the bottom of the page, containing a fitting icon and a given notification message.
