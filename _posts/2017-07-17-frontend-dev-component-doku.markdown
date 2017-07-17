@@ -8,6 +8,8 @@ categories: argos frontend developer documentation
 ## Content
 
 1. [Introduction to Argos components](#introduction-to-argos-components)
+1. [App](#app)
+1. [Header](#header)
 1. [DetailView](#detailview)
     1. [EventDiagram](#eventdiagram)
     1. [EventTable](#eventtable)
@@ -35,6 +37,22 @@ categories: argos frontend developer documentation
     1. [Notification](#notification)
     1. [RestRoutesManager](#restroutesmanager)
     1. [SearchBar](#searchbar)
+
+---
+
+
+## App
+The `App` component fetches the entity type hierachy from the back end and saves it globally into the _window_ variable _hierarchy_.
+It also wraps the theme provider from material ui around the front end's pages.
+
+---
+
+
+## Header
+This component defines a REACT `Router` with all available routes and the components behind them.
+To allow a simple navigation throughout the front end, the `Header` component provides buttons, like a back button, help and settings button, as well as a headline for the page itself, depending on the current view.
+Here, the logic for navigating in the browser's history is located as well.
+The `Header` component is embedded by the different views and takes a page title and optionally a status of an entity that can be visualized.
 
 ---
 
