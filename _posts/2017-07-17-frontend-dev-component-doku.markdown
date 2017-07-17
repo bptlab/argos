@@ -52,24 +52,25 @@ If the amount of events is to large, the `DetailView` will only pass chunks of e
 This component displays a tab for each passed event type and triggers a handler with the newly selected type in case the user selects a tab.
 The `EventTab` component is used within in the `DetailView` to let the user select the type of events that should be displayed for the current entity.
 
-##GridView
+
+## GridView
 The `GridView` fetches information about the current entity.
 Next to a `SearchBar`, whose filter value is passed to all `CardGrid` elements rendered for each type of available child entities, it shows the `HierarchyStepper`.
 
-###CardGrid
+### CardGrid
 A `CardGrid` element receives a parent entity and an entity type.
 It then renders an `EntityCard` for each entity of the correct entity type and being a child of the given parent entity, after fetching the corresponding information.
 Single entities might be hidden in case a filter is applied and does not match this entity.
 To provide a quick overview how the statusus are distributed within the entity type, a `StatusDiagram` is shown.
 
-###EntityCard
+### EntityCard
 The `EntityCard` component needs an entity object as a parameter, as well as the id of the parent entity.
 It renders information concerning the entity utilizing the `Utils/EntityInformation` component.
 Also links for browsing all children of the given entity or inspecting the events for this entity are build and displayed.
 
-###HierarchyStepper
+### HierarchyStepper
 Using the hierarchy's structure, the current entity with its type and available child entity types, the `HierarchyStepper` renders a graph showing parent entity types and the first level of child entity types.
 For rendering, the material ui classes `Stepper` and `StepLabel` are used.
 
-###StatusDiagram
+### StatusDiagram
 Receiving entity objects, the `StatusDiagram` component extracts the status information from them and renders a stacked, horizontal bar chart, visualizing the distribution of the different statutes.
