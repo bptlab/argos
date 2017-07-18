@@ -648,5 +648,5 @@ This becomes important, when the EEP and the AB are **not** deployed on the same
 
 * argosBackendEventTypesDirectory / argosBackendStaticDataDirectory
 
-These two properties define where the AB will search for the [static data](#static-data).<br>
+These two properties define where the AB will search for the [static data](#static-data-files).<br>
 **IMPORTANT**: You have to give the full path to the files. If you are operating a Windows machine, please define the path like this: ```/C:/Users/YourNameHere/BPT/static_data```.
