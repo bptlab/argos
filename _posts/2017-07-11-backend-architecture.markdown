@@ -556,4 +556,97 @@ The displayed code snippet shows, how the AB starts. It depicts how the parsing 
 ---
 #### Product Data
 
+An other type of static data are the product data. These are given as XML files. By default the files are located under ```argos-backend/src/main/resources/static_data```. The expected format for those files can be found [here](https://github.com/bptlab/argos-backend/wiki/Static-Data-File-Schema).
+
+Those files consist of two sections:
+* EntityTypes
+
+The first section describes the general hierarchy for the products (entities).
+
+![ArgosBackend EntityType Hierarchy](/argos/resources/backend/argos-backend-type-hierarchy.png "ArgosBackend EntityType Hierarchy")
+
+Shown above is an example for such a hierarchy.<br>
+This hierarchy in our XML format would look like this:
+```xml
+<staticData>
+    <types>
+        <type>
+            <name>SuperTypeA</name>
+            <attributes>
+                <attribute>
+                    <name>attributeA1</name>
+                </attribute>
+                <attribute>
+                    <name>attributeA2</name>
+                </attribute>
+            </attributes>
+            <childTypes>
+                <type>
+                    <name>SubTypeA</name>
+                    <attributes>
+                        <attribute>
+                            <name>attributeSA1</name>
+                        </attribute>
+                        <attribute>
+                            <name>attributeSA2</name>
+                        </attribute>
+                        <attribute>
+                            <name>attributeSA3</name>
+                        </attribute>
+                    </attributes>
+                </type>
+                <type>
+                    <name>SubTypeB</name>
+                    <attributes>
+                        <attribute>
+                            <name>attributeSB1</name>
+                        </attribute>
+                        <attribute>
+                            <name>attributeSB2</name>
+                        </attribute>
+                    </attributes>
+                </type>
+            </childTypes>
+        </type>
+    </types>
+</staticData>
+```
+
+As you can see, the type hierarchy is defined pretty straight forward. Additionally, we left enough space to expand the file format. If needed, you could easily add the attribute type - such as int, long, String - for each entry.
+
+* Entities
+
+The second section of the static product data is the actual entity hierarchy. This is very similar to the previous section.
+
+For an example please refer to the [file scheme documentation](https://github.com/bptlab/argos-backend/wiki/Static-Data-File-Schema).
+
+Now that we know the file scheme, we can look into the code to understand how those files are converted and finally stored in the database.
+
+![ArgosBackend StaticData Parsing](/argos/resources/backend/argos-backend-static-data-parsing.png "ArgosBackend StaticData Parsing")
+
+Shown above is the simplified structure of the parser architecture. The general idea of this architecture is to match the nested structure of the data. This is realized by nesting XMLSubParsers into the StaticDataParserImpl. The exact XMLSubParser hereby depends on the current context. Thus, parsing an entity will require an other parser than parsing an entity-type.<br>
+This architecture allows for a better division of responsibilities and creates more readable code. The only drawback is the more complex structure. We decided, that this tradeoff was worth the better code quality.
+
+For a more details please refer directly to the code. It is - as always in the AB - documented.
+
 ### Configuration
+
+The AB can be configured in many ways. This is done by manipulating the ```argos-backend/src/main/resources/argos-backend.properties``` file.
+
+![ArgosBackend PropertyEditor Architecture](/argos/resources/backend/argos-backend-property-editor-architecture.png "ArgosBackend PropertyEditor Architecture")
+
+The properties are managed by the PropertyEditorImpl. This is implemented as a singleton, since the entire system should have access to the properties. You can not only get the pre-defined properties from the mentioned file, but also manipulate properties at execution time. Additionally, you can use the property-keys as arguments when starting the AB.<br>
+**IMPORTANT**: Manipulated properties will **not** be persisted to the properties-file.
+
+Within the file you will find various sections with different configuration possibilities.<br>
+While most properties should be easy to understand, the most important once are listed below:
+
+* argosBackendExternalHost
+
+This property will define, where the AB is reachable. Thus, it defines where the EEP sends event notifications. <br>
+This becomes important, when the EEP and the AB are **not** deployed on the same machine.
+
+* argosBackendEventTypesDirectory / argosBackendStaticDataDirectory
+
+These two properties define where the AB will search for the [static data](#static-data).<br>
+**IMPORTANT**: You have to give the full path to the files. If you are operating a Windows machine, please define the path like this: ```/C:/Users/YourNameHere/BPT/static_data```.
