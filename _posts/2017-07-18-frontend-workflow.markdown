@@ -6,13 +6,13 @@ categories: argos frontend user documentation workflow
 ---
 
 ## An Argos introduction for users
-This page will explain the basic workflow with the Argos front end and will help the user to get started the first time, the application is used.
-Headlines should be seen as a structuring element but this guide is meant to be read in a row.
+This page will explain the basic workflow with the Argos front end and will help the user to get started the first time the application is used.
+Headlines should be seen as a structuring element but this elementary guide is meant to be read in a row.
 
 #### A guide to entity mappings
-Starting with a new front end, there are a few steps for users to do before first events can be viewed.
+Starting with a new front end, there are a few steps for users to do before first events can be observed.
 The first time the front end is opened, there should already be a few entities in the [`Grid-View`](https://bptlab.github.io/argos/jekyll/update/documentation/2017/07/06/grid-view-users-guide.html).
-But when inspecting them, no associated events might be shown.
+But when inspecting them in the [`Detail-View`](https://bptlab.github.io/argos/jekyll/update/documentation/2017/07/11/detail-view-users-guide.html), no associated events might be shown.
 
 Initially, the system does not know how to match occurring events with the correct entity.
 To make the system aware of connections between event type attributes and entity attributes, entity mappings need to be created for each event type.
@@ -36,10 +36,10 @@ Now, arriving events will be correctly mapped to their entities and the entity's
 #### A guide to event types and queries
 While using Argos, the initial event types might not suffice and, for example, the event stream should be analyzed for pattern.
 Again, in the [`Settings-View`](https://bptlab.github.io/argos/jekyll/update/documentation/2017/07/06/settings-view-users-guide.html), a new event type can be added by pressing "plus" in the right, bottom corner.
-Here, a name for the time stamp, the name for the time stamp attribute as well as custom attributes can be defined.
+Here, a name for the event type, the name for the time stamp attribute as well as custom attributes can be defined.
 After saving, the new event type can be found in the list of event types.
 To make the system aware of how to fetch or generate events for the new event type, a query is needed.
-Queries can be added, analogously to entity mappings, on the "event queries" tab by pressing "plus".
+Queries can be added on the "event queries" tab by pressing "plus", analogously to entity mappings.
 Next to a description for this query, an input field for the query itself is provided.
 The input syntax for queries can be found in the Esper Reference ([Version 5.3.0 documentation](http://www.espertech.com/esper/release-5.3.0/esper-reference/html/)).
 After saving the query, the system now knows how events for this certain event type should be produced and each time the query matches, events will be generated.
